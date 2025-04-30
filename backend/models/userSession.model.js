@@ -8,8 +8,8 @@ const userSessionSchema = new mongoose.Schema({
     },
     email:{
       type:String,
-      required:true,
-      default:null,
+      // required:true,
+      // default:'xyz',
     },
     expiresAt: {
         type: Date,

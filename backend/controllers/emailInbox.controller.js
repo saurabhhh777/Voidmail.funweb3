@@ -16,6 +16,10 @@ export const getAllEmails = async (req, res) => {
         const emails = await EmailInbox.find({ to: email })
             .sort({ createdAt: -1 }); // Sort by most recent first
 
+
+
+        console.log('Retrieved emails:', emails);
+
         return res.status(200).json({
             success: true,
             message: 'Emails retrieved successfully',

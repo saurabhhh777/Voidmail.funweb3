@@ -2,37 +2,60 @@ import UserSession from '../models/userSession.model.js';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 
+// import crypto from 'crypto'; // Ensure this is imported
+
 export const createUserSession = async (req, res) => {
     try {
-      
-        // Generate a unique session ID
-        const sessionId = uuidv4();
-        
-        // Set expiration time (e.g., 1 hour from now)
-        const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+        const alphaNumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const length = 16;
+        const randomBytes = crypto.randomBytes(length / 2).toString('hex');
+        const randomString = Array.from({ length }, () => alphaNumeric[Math.floor(Math.random() * alphaNumeric.length)]).join('');
 
-        // Create new session
+        const token = randomBytes + randomString;
+
+        console.log('Generated session ID:', token);
+
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+        const domain = ["asksaurabh.xyz", "bigtimer.site"];
+        const randomDomain = domain[Math.floor(Math.random() * domain.length)];
+        console.log('Random domain selected:', randomDomain);
+
+        const emailPrefixAlpha = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let emailPrefix = '';
+        for (let i = 0; i < 8; i++) {
+            emailPrefix += emailPrefixAlpha[Math.floor(Math.random() * emailPrefixAlpha.length)];
+        }
+
+        const email = `${emailPrefix}@${randomDomain}`;
+
         const session = await UserSession.create({
-            sessionId,
-            expiresAt
+            sessionId: token,
+            expiresAt,
+            email
         });
 
-        // Set cookie with session ID
-        res.cookie('sessionId', sessionId, {
+        console.log('Session created in database:', session);
+
+        res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
             maxAge: 60 * 60 * 1000 // 1 hour
         });
 
+        console.log('Cookie set with sessionId:', token);
+
         return res.status(201).json({
             success: true,
             message: 'Session created successfully',
             data: {
-                sessionId,
-                expiresAt
+                token,
+                expiresAt,
+                email
             }
         });
+
     } catch (error) {
         console.error('Error in createUserSession:', error);
         return res.status(500).json({
@@ -43,12 +66,17 @@ export const createUserSession = async (req, res) => {
     }
 };
 
+
+
+
 export const createEmail = async (req, res) => {
     try {
-        // Get session ID from cookie
-        const {sessionId} = req.cookies;
+        // Get session ID from cookie or request body
+        const token = req.cookies?.token || req.body?.token;
 
-        console.log("sessionId",sessionId);
+        console.log('Request cookies:', req.cookies);
+        console.log('Request body:', req.body);
+        console.log('Session ID from request:', token);
 
         if (!sessionId) {
             return res.status(401).json({
@@ -58,7 +86,8 @@ export const createEmail = async (req, res) => {
         }
 
         // Find the user session
-        const userSession = await UserSession.findOne({ sessionId });
+        const userSession = await UserSession.findOne({ token});
+        console.log('Found user session:', userSession);
 
         if (!userSession) {
             return res.status(401).json({
