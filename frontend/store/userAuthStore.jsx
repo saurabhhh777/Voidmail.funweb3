@@ -18,6 +18,11 @@ export const userAuthStore = create(persist((set) => ({
                 expiresAt: response.data.data.expiresAt,
                 isLoading: false
             });
+
+            console.log("Email of the user session:", response.data.data.email);
+            return response.data.data.email; // Return the sessionId for further use
+            
+
         } catch (error) {
             set({
                 error: error.response?.data?.message || 'Failed to create session',
@@ -29,14 +34,23 @@ export const userAuthStore = create(persist((set) => ({
     createEmail: async () => {
         try {
             set({ isLoading: true, error: null });
-            const response = await axiosInstance.post('/api/v1/user/createEmail');
+            const { sessionId } = userAuthStore.getState();
+            
+            if (!sessionId) {
+                throw new Error('No session found. Please create a session first.');
+            }
+
+            const response = await axiosInstance.post('/api/v1/user/createEmail', {
+                sessionId
+            });
+            
             set({
                 email: response.data.data.email,
                 isLoading: false
             });
         } catch (error) {
             set({
-                error: error.response?.data?.message || 'Failed to create email',
+                error: error.response?.data?.message || error.message || 'Failed to create email',
                 isLoading: false
             });
         }
