@@ -19,7 +19,13 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+
+app.use(cors({
+    origin: "http://localhost:5173", // only allow frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  }));
+  
 
 app.use("/api/v1/user",UserRoute);
 app.use("/api/v1/email",EmailRoute);

@@ -35,3 +35,43 @@ export const getAllEmails = async (req, res) => {
     }
 };
 
+
+export const saveEmail = async (req, res) => {
+    try {
+        const {to, from, subject, text, html} = req.body;
+
+        if(!to || !from){
+            return res.status(400).json({
+                success: false,
+                message: 'To and From fields are required'
+            });
+        }
+
+        const emailInbox =  new EmailInbox({
+            to,
+            from,
+            subject,
+            text,
+            html
+        });
+
+        const savedEmail = await emailInbox.save();
+        console.log('Email saved:', savedEmail);
+
+        
+        return res.status(201).json({
+            success: true,
+            message: 'Email saved successfully',
+            data: savedEmail
+        });
+
+        
+    } catch (error) {
+        console.log('Error in saveEmail:', error);
+        return res.status(500).json({
+            message:"Server error, please try again later",
+            success: false
+        });
+    }
+}
+
