@@ -41,7 +41,7 @@ const server = new SMTPServer({
             console.log("📩 Parsed Email Received:", emailData);
 
             try {
-                await axios.post("http://localhost:3000/api/store-email", emailData);
+                await axios.post("http://localhost:3000/api/v1/email/saveEmail", emailData);
                 console.log("✅ Email forwarded to Express backend");
             } catch (e) {
                 console.error("❌ Failed to send email to Express:", e.message);
