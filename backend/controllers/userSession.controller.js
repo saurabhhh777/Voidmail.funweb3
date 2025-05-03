@@ -74,11 +74,13 @@ export const createEmail = async (req, res) => {
         // Get session ID from cookie or request body
         const token = req.cookies?.token || req.body?.token;
 
+        console.log("I am token",token)
+
         console.log('Request cookies:', req.cookies);
         console.log('Request body:', req.body);
         console.log('Session ID from request:', token);
 
-        if (!sessionId) {
+        if (!token) {
             return res.status(401).json({
                 success: false,
                 message: 'No session found. Please create a session first.'
@@ -86,7 +88,7 @@ export const createEmail = async (req, res) => {
         }
 
         // Find the user session
-        const userSession = await UserSession.findOne({ token});
+        const userSession = await UserSession.findOne({ sessionId: token });
         console.log('Found user session:', userSession);
 
         if (!userSession) {
@@ -96,16 +98,16 @@ export const createEmail = async (req, res) => {
             });
         }
 
-        // If user already has an email, return it
-        if (userSession.email) {
-            return res.status(200).json({
-                success: true,
-                message: 'Email already exists for this session',
-                data: {
-                    email: userSession.email
-                }
-            });
-        }
+        // // If user already has an email, return it
+        // if (userSession.email) {
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: 'Email already exists for this session',
+        //         data: {
+        //             email: userSession.email
+        //         }
+        //     });
+        // }
 
         // Define domains
         const domains = ["asksaurabh.xyz", "bigtimer.site"];
@@ -113,6 +115,7 @@ export const createEmail = async (req, res) => {
 
         // Generate email prefix
         const prefix = crypto.randomBytes(4).toString('hex');
+        console.log("I am prefix",prefix)
         const email = `${prefix}@${domain}`;
 
         // Update user session with email
