@@ -6,7 +6,7 @@ import { getAllEmails, saveEmail  } from "../controllers/emailInbox.controller.j
 
 
 route.route('/saveEmail').post(saveEmail);
-route.route('/getAllEmails').get(getAllEmails);
+route.route('/getAllEmails').post(getAllEmails);
 
 
 
