@@ -17,7 +17,7 @@ export const createUserSession = async (req, res) => {
 
         const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-        const domain = ["asksaurabh.xyz", "bigtimer.site"];
+        const domain = ["asksaurabh.xyz", "bigtimer.site","voidmail.fun","voidmail.info","voidmail.online","voidmail.shop"];
         const randomDomain = domain[Math.floor(Math.random() * domain.length)];
         console.log('Random domain selected:', randomDomain);
 
@@ -110,7 +110,7 @@ export const createEmail = async (req, res) => {
         // }
 
         // Define domains
-        const domains = ["asksaurabh.xyz", "bigtimer.site"];
+        const domains = ["asksaurabh.xyz", "bigtimer.site","voidmail.fun","voidmail.info","voidmail.online","voidmail.shop"];
         const domain = domains[Math.floor(Math.random() * domains.length)];
 
         // Generate email prefix
