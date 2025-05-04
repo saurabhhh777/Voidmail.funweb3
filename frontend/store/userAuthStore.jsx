@@ -68,6 +68,39 @@ export const userAuthStore = create(
         }
       },
 
+      getAllEmails: async (email) => {
+        try {
+          set({ isLoading: true, error: null });
+      
+          if (!email) {
+            throw new Error("No email provided.");
+          }
+      
+          const response = await axiosInstance.post(
+            "/api/v1/email/getAllEmails", // ✅ correct route
+            { email }, // ✅ pass in body
+            { withCredentials: true } // optional, if using cookies
+          );
+      
+          set({
+            emails: response.data.data,
+            isLoading: false,
+          });
+      
+          return response.data.data;
+        } catch (error) {
+          set({
+            error:
+              error.response?.data?.message ||
+              error.message ||
+              "Failed to fetch emails",
+            isLoading: false,
+          });
+        }
+      },
+      
+      
+
       clearSession: () => {
         set({
           sessionId: null,
