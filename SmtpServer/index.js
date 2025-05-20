@@ -41,7 +41,7 @@ const server = new SMTPServer({
             console.log("📩 Parsed Email Received:", emailData);
 
             try {
-                await axios.post("http://localhost:4000/api/v1/email/saveEmail", emailData);
+                await axios.post("https://api.voidmail.fun/api/v1/email/saveEmail", emailData);
                 console.log("✅ Email forwarded to Express backend");
             } catch (e) {
                 console.error("❌ Failed to send email to Express:", e.message);
@@ -52,6 +52,8 @@ const server = new SMTPServer({
     }
 });
 
-server.listen(25, () => {
-    console.log("📨 SMTP server is running on port 25");
+const PORT = 2525;
+
+server.listen(PORT, () => {
+    console.log(`📨 SMTP server is running on port ${PORT}`);
 });
