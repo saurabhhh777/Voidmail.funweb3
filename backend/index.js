@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-    origin: "http://localhost:5173", // only allow frontend
+    origin: ["https://www.voidmail.fun","https://mail.voidmail.fun"], // only allow frontend
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   }));
