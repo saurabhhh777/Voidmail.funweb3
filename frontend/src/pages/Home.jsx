@@ -11,7 +11,7 @@ const Home = () => {
           Voidmail
         </div>
         <div className="space-x-6 text-sm font-medium hidden md:flex">
-          {['Home', 'About', 'Contact', 'privacy-policy'].map((item) => (
+          {['Home', 'About', 'Contact', 'PrivacyPolicy'].map((item) => (
             <Link 
               key={item}
               to={`/${item==="Home" ? "/" : item.toLowerCase()}`}
@@ -86,7 +86,7 @@ const Home = () => {
       {/* Footer */}
       <footer className="text-center py-8 text-sm text-gray-500 border-t border-[#ffffff08]">
         <div className="flex justify-center gap-6 mb-4">
-          {['Terms', 'privacy-policy', 'Contact', 'FAQ'].map((item) => (
+          {['Terms', 'PrivacyPolicy', 'Contact', 'FAQ'].map((item) => (
             <Link 
               key={item}
               to={`/${item.toLowerCase()}`} 
