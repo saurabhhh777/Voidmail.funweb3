@@ -25,9 +25,9 @@ const Home = () => {
         <p className="text-lg max-w-2xl mx-auto text-gray-300 mb-10">
           Voidmail is your privacy-first disposable email solution. Instantly generate emails to protect your inbox from spam.
         </p>
-        <Link to="/inbox">
+        <Link to="/main">
           <button className="px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition duration-300">
-            Generate Mailbox
+            Get Started
           </button>
         </Link>
       </section>
@@ -40,7 +40,7 @@ const Home = () => {
         <p className="text-gray-400 mb-6">
           No sign-up required. No trackers. Just instant, secure temporary email.
         </p>
-        <Link to="/inbox">
+        <Link to="/main">
           <button className="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
             Use Now Free
           </button>
