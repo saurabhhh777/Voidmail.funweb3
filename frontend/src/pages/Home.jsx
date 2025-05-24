@@ -11,10 +11,10 @@ const Home = () => {
           Voidmail
         </div>
         <div className="space-x-6 text-sm font-medium hidden md:flex">
-          {['Home', 'About', 'Contact', 'Privacy'].map((item) => (
+          {['Home', 'About', 'Contact', 'privacy-policy'].map((item) => (
             <Link 
               key={item}
-              to={`/${item.toLowerCase().replace(' ', '-')}`} 
+              to={`/${item==="Home" ? "/" : item.toLowerCase()}`}
               className="hover:text-indigo-400 transition-all duration-300 hover:-translate-y-[2px]"
             >
               {item}
@@ -86,7 +86,7 @@ const Home = () => {
       {/* Footer */}
       <footer className="text-center py-8 text-sm text-gray-500 border-t border-[#ffffff08]">
         <div className="flex justify-center gap-6 mb-4">
-          {['Terms', 'Privacy', 'Contact', 'FAQ'].map((item) => (
+          {['Terms', 'privacy-policy', 'Contact', 'FAQ'].map((item) => (
             <Link 
               key={item}
               to={`/${item.toLowerCase()}`} 
