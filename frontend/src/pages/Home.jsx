@@ -86,7 +86,7 @@ const Home = () => {
       {/* Footer */}
       <footer className="text-center py-8 text-sm text-gray-500 border-t border-[#ffffff08]">
         <div className="flex justify-center gap-6 mb-4">
-          {['Terms', 'P rivacyPolicy', 'Contact', 'FAQ'].map((item) => (
+          {['Terms', 'PrivacyPolicy', 'Contact', 'FAQ'].map((item) => (
             <Link 
               key={item}
               to={`/${item.toLowerCase()}`} 
