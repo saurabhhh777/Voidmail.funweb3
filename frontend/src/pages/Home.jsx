@@ -1,12 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  SparklesIcon,
-  ShieldCheckIcon,
-  ClockIcon,
-  ArrowsRightLeftIcon,
-} from "@heroicons/react/24/outline";
-import Footer from "./Footer"; // Assuming you have a Footer component
+import { SparklesIcon, ShieldCheckIcon, ClockIcon, ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 
 const Home = () => {
   return (
@@ -17,10 +11,10 @@ const Home = () => {
           Voidmail
         </div>
         <div className="space-x-6 text-sm font-medium hidden md:flex">
-          {["Home", "About", "Contact", "PrivacyPolicy"].map((item) => (
-            <Link
+          {['Home', 'About', 'Contact', 'PrivacyPolicy'].map((item) => (
+            <Link 
               key={item}
-              to={`/${item === "Home" ? "/" : item.toLowerCase()}`}
+              to={`/${item==="Home" ? "/" : item.toLowerCase()}`}
               className="hover:text-indigo-400 transition-all duration-300 hover:-translate-y-[2px]"
             >
               {item}
@@ -43,8 +37,7 @@ const Home = () => {
             </span>
           </h1>
           <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
-            Generate temporary emails instantly. Protect your privacy and keep
-            your main inbox spam-free forever.
+            Generate temporary emails instantly. Protect your privacy and keep your main inbox spam-free forever.
           </p>
           <Link to="/main">
             <button className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl hover:scale-105 transition-transform duration-300 font-semibold shadow-lg shadow-indigo-500/20">
@@ -55,33 +48,16 @@ const Home = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 bg-gradient-to-b from-black via-[#0a0a0a] to-[#0f0f0f] text-white">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-10">
+      <section className="py-16 bg-gradient-to-b from-[#ffffff03] to-[#ffffff01]">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
           {[
-            {
-              icon: SparklesIcon,
-              title: "One-Click Aliases",
-              text: "Instantly generate throwaway emails for any need.",
-            },
-            {
-              icon: ShieldCheckIcon,
-              title: "Void-Level Privacy",
-              text: "No storage. No tracking. Fully encrypted pipeline.",
-            },
-            {
-              icon: ClockIcon,
-              title: "Auto-Vanish",
-              text: "Every message self-destructs in 24 hours. Gone. Forever.",
-            },
+            { icon: SparklesIcon, title: "Instant Creation", text: "Generate new email addresses in one click" },
+            { icon: ShieldCheckIcon, title: "Secure", text: "End-to-end encrypted & no data storage" },
+            { icon: ClockIcon, title: "Self-Destructing", text: "Emails automatically delete after 24h" },
           ].map((feature, idx) => (
-            <div
-              key={idx}
-              className="p-6 bg-[#111] rounded-2xl border border-[#222] hover:border-violet-500/30 transition-all group shadow-md hover:shadow-violet-500/10"
-            >
-              <feature.icon className="h-12 w-12 text-violet-400 mb-5 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-2xl font-bold mb-2 group-hover:text-violet-300 transition-colors duration-200">
-                {feature.title}
-              </h3>
+            <div key={idx} className="p-6 bg-[#ffffff05] rounded-xl border border-[#ffffff08] hover:border-indigo-500/30 transition-all group">
+              <feature.icon className="h-12 w-12 text-indigo-400 mb-4 group-hover:scale-110 transition-transform" />
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
               <p className="text-gray-400">{feature.text}</p>
             </div>
           ))}
@@ -108,9 +84,20 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <Footer />
-
-      {/* Background Effects */}
+      <footer className="text-center py-8 text-sm text-gray-500 border-t border-[#ffffff08]">
+        <div className="flex justify-center gap-6 mb-4">
+          {['Terms', 'P rivacyPolicy', 'Contact', 'FAQ'].map((item) => (
+            <Link 
+              key={item}
+              to={`/${item.toLowerCase()}`} 
+              className="hover:text-indigo-400 transition-colors"
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
+        <div>&copy; {new Date().getFullYear()} Voidmail.fun • Open Source & Privacy First</div>
+      </footer>
     </div>
   );
 };
