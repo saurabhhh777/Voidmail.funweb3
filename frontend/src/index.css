@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@layer base {
+    :root {
+        --font-poppins: "Poppins", sans-serif;
+        --font-jost: "Jost", sans-serif;
+    }
+}
