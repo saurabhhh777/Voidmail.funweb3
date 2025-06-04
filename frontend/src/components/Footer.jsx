@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { EnvelopeIcon, PhoneIcon, GlobeAltIcon } from "@heroicons/react/24/outline";
 
-const Footer = () => {
+const Footer = ({className=""}) => {
   return (
-    <footer className="bg-[#151517] text-gray-300 pt-16 pb-8 px-4 md:px-8 border-t border-[#ffffff08]">
+    <footer className={`bg-[#151517] text-gray-300 pt-16 pb-8 px-4 md:px-8 border-t border-[#ffffff08] ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}
@@ -33,7 +33,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Information</h3>
             <ul className="space-y-2">
-              {['About', 'Blog', 'Testimonials', 'FAQ'].map((item) => (
+              {['About', 'Blog', 'FAQ'].map((item) => (
                 <li key={item}>
                   <Link to={`/${item.toLowerCase()}`} className="hover:text-[#10B981] transition-colors">
                     {item}

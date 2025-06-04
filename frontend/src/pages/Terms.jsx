@@ -1,58 +1,178 @@
 import { Link } from "react-router-dom";
+import { ShieldCheckIcon, LockClosedIcon, BanIcon, ExclamationIcon, CodeIcon } from "@heroicons/react/24/outline";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import CtaSection from "../components/CtaSection";
 
 const Terms = () => {
   const sections = [
     {
-      title: "Introduction",
-      content: "By using Voidmail.fun, you agree to these Terms. Disagreeing users must refrain from using our services."
+      title: "1. Introduction",
+      icon: <ShieldCheckIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">Welcome to Voidmail.fun ("Service"). These Terms of Service ("Terms") govern your access to and use of our temporary email service. By accessing or using the Service, you agree to be bound by these Terms.</p>
+          <p>If you do not agree to these Terms, you must immediately discontinue using our Service. Continued use constitutes acceptance of these Terms.</p>
+        </>
+      )
     },
     {
-      title: "User Responsibilities",
-      content: "Do not use our service for illegal activities. You're responsible for how you use temporary emails."
+      title: "2. Service Description",
+      icon: <CodeIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">Voidmail.fun provides temporary, disposable email addresses ("Burner Emails") that:</p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Are automatically generated without registration</li>
+            <li>Can receive but not send emails</li>
+            <li>Automatically expire after 24 hours of inactivity</li>
+            <li>Provide a layer of privacy for your primary email</li>
+          </ul>
+        </>
+      )
     },
     {
-      title: "Prohibited Activities",
-      content: "No spamming, phishing, harassment, or malware distribution."
+      title: "3. User Responsibilities",
+      icon: <LockClosedIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">When using our Service, you agree to:</p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Use the Service only for lawful purposes</li>
+            <li>Not impersonate others or provide false information</li>
+            <li>Be solely responsible for your use of Burner Emails</li>
+            <li>Not rely on Burner Emails for critical communications</li>
+          </ul>
+        </>
+      )
     },
     {
-      title: "Liability",
-      content: "Service provided 'as is' without warranties. We're not liable for damages from service use."
+      title: "4. Prohibited Activities",
+      icon: <BanIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">You may not use our Service to:</p>
+          <ul className="list-disc pl-6 space-y-2 mb-4">
+            <li>Send spam, phishing emails, or malware</li>
+            <li>Harass, threaten, or defraud others</li>
+            <li>Violate any laws or regulations</li>
+            <li>Bypass security measures of other services</li>
+            <li>Engage in any fraudulent activity</li>
+          </ul>
+          <p>Violations may result in immediate termination of access without notice.</p>
+        </>
+      )
     },
+    {
+      title: "5. Privacy and Data",
+      icon: <LockClosedIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">Our Privacy Policy explains how we handle your data:</p>
+          <ul className="list-disc pl-6 space-y-2 mb-4">
+            <li>We do not require personal information to use the Service</li>
+            <li>Emails are automatically deleted after 24 hours</li>
+            <li>We do not store email contents long-term</li>
+            <li>We may collect minimal usage data for analytics</li>
+          </ul>
+          <p>By using the Service, you consent to our data practices as described in our <Link to="/privacy" className="text-[#10B981] hover:underline">Privacy Policy</Link>.</p>
+        </>
+      )
+    },
+    {
+      title: "6. Service Limitations",
+      icon: <ExclamationIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">The Service has certain limitations:</p>
+          <ul className="list-disc pl-6 space-y-2 mb-4">
+            <li>Emails are temporary and will expire</li>
+            <li>We cannot recover deleted emails</li>
+            <li>Service may be interrupted for maintenance</li>
+            <li>We impose rate limits to prevent abuse</li>
+          </ul>
+          <p>We reserve the right to modify or discontinue the Service at any time without notice.</p>
+        </>
+      )
+    },
+    {
+      title: "7. Liability Disclaimer",
+      icon: <ShieldCheckIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. TO THE FULLEST EXTENT PERMITTED BY LAW, VOIDMAIL.FUN DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED.</p>
+          <p>In no event shall Voidmail.fun be liable for any indirect, incidental, special or consequential damages arising from your use of the Service.</p>
+        </>
+      )
+    },
+    {
+      title: "8. Changes to Terms",
+      icon: <ExclamationIcon className="h-5 w-5" />,
+      content: (
+        <>
+          <p className="mb-4">We may modify these Terms at any time. When we do, we will update the "last updated" date at the top of this page.</p>
+          <p>Your continued use of the Service after such modifications constitutes acceptance of the revised Terms.</p>
+        </>
+      )
+    },
+    {
+      title: "9. Governing Law",
+      icon: <ShieldCheckIcon className="h-5 w-5" />,
+      content: (
+        <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction where Voidmail.fun operates, without regard to its conflict of law provisions.</p>
+      )
+    }
   ];
 
   return (
     <div className="bg-[#0e0e10] text-white min-h-screen flex flex-col">
-      {/* Simplified Navbar */}
-      <nav className="p-4 border-b border-gray-800">
-        <div className="flex justify-between items-center max-w-6xl mx-auto">
-          <Link to="/" className="text-2xl font-bold text-indigo-500">
-            Voidmail
-          </Link>
-          <div className="space-x-4">
-            <Link to="/" className="hover:text-indigo-400">Home</Link>
-            <Link to="/terms" className="text-indigo-400">Terms</Link>
-          </div>
-        </div>
-      </nav>
+      <div className="mt-2 mr-2 ml-2">
+        <Navbar />  
+      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-3xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mt-8 mb-6">Terms of Service</h1>
+      <main className="flex-1 max-w-4xl mx-auto px-6 py-12">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#10B981]/10 rounded-full mb-6">
+            <ShieldCheckIcon className="h-8 w-8 text-[#10B981]" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+            <span className="bg-gradient-to-r from-[#10B981] to-[#3B82F6] bg-clip-text text-transparent">
+              Terms of Service
+            </span>
+          </h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
         
-        <div className="space-y-6">
+        <div className="space-y-8 mb-16">
           {sections.map((section, index) => (
-            <div key={index} className="bg-gray-900 p-6 rounded-lg">
-              <h2 className="text-xl font-semibold mb-2">{section.title}</h2>
-              <p className="text-gray-400">{section.content}</p>
+            <div 
+              key={index} 
+              className="bg-[#151517] p-8 rounded-xl border border-[#ffffff08] hover:border-[#10B981]/30 transition-colors"
+            >
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-[#10B981]/10 flex items-center justify-center text-[#10B981]">
+                  {section.icon}
+                </span>
+                {section.title}
+              </h2>
+              <div className="text-gray-400 space-y-4">
+                {section.content}
+              </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-12 text-center text-gray-400">
-          <p>Need help? <Link to="/contact" className="text-indigo-400">Contact us</Link></p>
-          <p className="mt-4 text-sm">&copy; {new Date().getFullYear()} Voidmail.fun</p>
+        <div className="bg-[#151517] p-8 rounded-xl border border-[#ffffff08] mb-12">
+          <h2 className="text-2xl font-bold mb-4 text-[#10B981]">Contact Information</h2>
+          <p className="text-gray-400 mb-4">For questions about these Terms, please contact us at:</p>
+          <p className="text-white">legal@voidmail.fun</p>
         </div>
       </main>
+
+      <CtaSection />
+      <Footer />
     </div>
   );
 };
