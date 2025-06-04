@@ -1,9 +1,19 @@
 import React from "react";
 import { ShieldCheckIcon, SparklesIcon, ClockIcon } from "@heroicons/react/24/outline";
+import CtaSection from "../components/CtaSection";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+
 
 const About = () => {
   return (
     <div className="min-h-screen bg-[#0e0e10] text-white">
+
+      {/* Navbar */}
+      <div className="pt-2 mr-2 ml-2">
+        <Navbar />
+      </div>
+
       {/* Hero Section */}
       <section className="relative py-20 px-6 overflow-hidden">
         <div className="absolute w-[600px] h-[600px] bg-[#10B981]/10 blur-[120px] -top-32 left-1/2 -translate-x-1/2" />
@@ -87,6 +97,14 @@ const About = () => {
           </a>
         </div>
       </section>
+
+        {/*Ctasection*/}
+        <CtaSection/>
+
+        {/* Footer */}
+        <Footer/>
+      
+
     </div>
   );
 };
