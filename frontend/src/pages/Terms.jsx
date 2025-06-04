@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
-import { ShieldCheckIcon, LockClosedIcon, BanIcon, ExclamationIcon, CodeIcon } from "@heroicons/react/24/outline";
+import {
+  ShieldCheckIcon,
+  LockClosedIcon,
+  BanIcon,
+  ExclamationTriangleIcon,
+  CommandLineIcon
+} from "@heroicons/react/24/outline";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CtaSection from "../components/CtaSection";
@@ -18,7 +24,7 @@ const Terms = () => {
     },
     {
       title: "2. Service Description",
-      icon: <CodeIcon className="h-5 w-5" />,
+      icon: <CommandLineIcon className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">Voidmail.fun provides temporary, disposable email addresses ("Burner Emails") that:</p>
@@ -81,7 +87,7 @@ const Terms = () => {
     },
     {
       title: "6. Service Limitations",
-      icon: <ExclamationIcon className="h-5 w-5" />,
+      icon: <ExclamationTriangleIcon className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">The Service has certain limitations:</p>
@@ -107,7 +113,7 @@ const Terms = () => {
     },
     {
       title: "8. Changes to Terms",
-      icon: <ExclamationIcon className="h-5 w-5" />,
+      icon: <ExclamationTriangleIcon className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">We may modify these Terms at any time. When we do, we will update the "last updated" date at the top of this page.</p>
@@ -127,7 +133,7 @@ const Terms = () => {
   return (
     <div className="bg-[#0e0e10] text-white min-h-screen flex flex-col">
       <div className="mt-2 mr-2 ml-2">
-        <Navbar />  
+        <Navbar />
       </div>
 
       <main className="flex-1 max-w-4xl mx-auto px-6 py-12">
@@ -144,11 +150,11 @@ const Terms = () => {
             Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
-        
+
         <div className="space-y-8 mb-16">
           {sections.map((section, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="bg-[#151517] p-8 rounded-xl border border-[#ffffff08] hover:border-[#10B981]/30 transition-colors"
             >
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
