@@ -1,4 +1,4 @@
-import { QuestionMarkCircleIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { HelpCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const FAQ = () => {
@@ -68,7 +68,7 @@ const FAQ = () => {
               className="p-6 bg-[#141416] rounded-xl border border-[#ffffff08] hover:border-indigo-500/30 transition-all group"
             >
               <div className="flex items-start gap-4">
-                <QuestionMarkCircleIcon className="h-6 w-6 text-indigo-400 flex-shrink-0 mt-1" />
+                <HelpCircle className="h-6 w-6 text-indigo-400 flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="text-xl font-semibold mb-2">{item.question}</h3>
                   <p className="text-gray-400">{item.answer}</p>
@@ -87,7 +87,7 @@ const FAQ = () => {
               className="inline-flex items-center text-indigo-400 hover:text-indigo-300 transition-colors"
             >
               Contact Support
-              <ArrowRightIcon className="h-4 w-4 ml-2" />
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
           </div>
         </div>

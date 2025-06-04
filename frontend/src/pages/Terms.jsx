@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import {
-  ShieldCheckIcon,
-  LockClosedIcon,
-  BanIcon,
-  ExclamationTriangleIcon,
-  CommandLineIcon
-} from "@heroicons/react/24/outline";
+  ShieldCheck,
+  Lock,
+  Ban,
+  AlertTriangle,
+  Terminal
+} from "lucide-react";
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CtaSection from "../components/CtaSection";
@@ -14,7 +15,7 @@ const Terms = () => {
   const sections = [
     {
       title: "1. Introduction",
-      icon: <ShieldCheckIcon className="h-5 w-5" />,
+      icon: <ShieldCheck className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">Welcome to Voidmail.fun ("Service"). These Terms of Service ("Terms") govern your access to and use of our temporary email service. By accessing or using the Service, you agree to be bound by these Terms.</p>
@@ -24,7 +25,7 @@ const Terms = () => {
     },
     {
       title: "2. Service Description",
-      icon: <CommandLineIcon className="h-5 w-5" />,
+      icon: <Terminal className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">Voidmail.fun provides temporary, disposable email addresses ("Burner Emails") that:</p>
@@ -39,7 +40,7 @@ const Terms = () => {
     },
     {
       title: "3. User Responsibilities",
-      icon: <LockClosedIcon className="h-5 w-5" />,
+      icon: <Lock className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">When using our Service, you agree to:</p>
@@ -54,7 +55,7 @@ const Terms = () => {
     },
     {
       title: "4. Prohibited Activities",
-      icon: <BanIcon className="h-5 w-5" />,
+      icon: <Ban className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">You may not use our Service to:</p>
@@ -71,7 +72,7 @@ const Terms = () => {
     },
     {
       title: "5. Privacy and Data",
-      icon: <LockClosedIcon className="h-5 w-5" />,
+      icon: <Lock className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">Our Privacy Policy explains how we handle your data:</p>
@@ -87,7 +88,7 @@ const Terms = () => {
     },
     {
       title: "6. Service Limitations",
-      icon: <ExclamationTriangleIcon className="h-5 w-5" />,
+      icon: <AlertTriangle className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">The Service has certain limitations:</p>
@@ -103,7 +104,7 @@ const Terms = () => {
     },
     {
       title: "7. Liability Disclaimer",
-      icon: <ShieldCheckIcon className="h-5 w-5" />,
+      icon: <ShieldCheck className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. TO THE FULLEST EXTENT PERMITTED BY LAW, VOIDMAIL.FUN DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED.</p>
@@ -113,7 +114,7 @@ const Terms = () => {
     },
     {
       title: "8. Changes to Terms",
-      icon: <ExclamationTriangleIcon className="h-5 w-5" />,
+      icon: <AlertTriangle className="h-5 w-5" />,
       content: (
         <>
           <p className="mb-4">We may modify these Terms at any time. When we do, we will update the "last updated" date at the top of this page.</p>
@@ -123,7 +124,7 @@ const Terms = () => {
     },
     {
       title: "9. Governing Law",
-      icon: <ShieldCheckIcon className="h-5 w-5" />,
+      icon: <ShieldCheck className="h-5 w-5" />,
       content: (
         <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction where Voidmail.fun operates, without regard to its conflict of law provisions.</p>
       )
@@ -139,7 +140,7 @@ const Terms = () => {
       <main className="flex-1 max-w-4xl mx-auto px-6 py-12">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-[#10B981]/10 rounded-full mb-6">
-            <ShieldCheckIcon className="h-8 w-8 text-[#10B981]" />
+            <ShieldCheck className="h-8 w-8 text-[#10B981]" />
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
             <span className="bg-gradient-to-r from-[#10B981] to-[#3B82F6] bg-clip-text text-transparent">
@@ -147,7 +148,7 @@ const Terms = () => {
             </span>
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
           </p>
         </div>
 
@@ -163,9 +164,7 @@ const Terms = () => {
                 </span>
                 {section.title}
               </h2>
-              <div className="text-gray-400 space-y-4">
-                {section.content}
-              </div>
+              <div className="text-gray-400 space-y-4">{section.content}</div>
             </div>
           ))}
         </div>

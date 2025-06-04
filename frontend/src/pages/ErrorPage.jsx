@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaceFrownIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { Frown, ArrowLeft, Mail } from 'lucide-react';
 
 const ErrorPage = () => {
   return (
@@ -7,7 +7,7 @@ const ErrorPage = () => {
       {/* Error illustration */}
       <div className="relative mb-8">
         <div className="w-40 h-40 bg-gradient-to-br from-[#10B981]/20 to-[#3B82F6]/20 rounded-full flex items-center justify-center mx-auto">
-          <FaceFrownIcon className="h-20 w-20 text-[#10B981]" />
+          <Frown className="h-20 w-20 text-[#10B981]" />
         </div>
         <div className="absolute -top-4 -right-4 bg-[#EF4444] text-white text-xs font-bold rounded-full px-3 py-1 transform rotate-12">
           404
@@ -35,7 +35,7 @@ const ErrorPage = () => {
           to="/" 
           className="px-6 py-3 bg-gradient-to-r from-[#10B981] to-[#3B82F6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
         >
-          <ArrowLeftIcon className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5" />
           Back to Home
         </Link>
         
@@ -43,7 +43,7 @@ const ErrorPage = () => {
           to="/main" 
           className="px-6 py-3 bg-transparent border border-[#10B981] text-[#10B981] rounded-lg font-medium hover:bg-[#10B981]/10 transition-colors flex items-center gap-2"
         >
-          <EnvelopeIcon className="h-5 w-5" />
+          <Mail className="h-5 w-5" />
           Generate Email
         </Link>
       </div>

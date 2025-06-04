@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PaperAirplaneIcon, EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { Send, Mail, Phone, MapPin } from "lucide-react";
 import Footer from "../components/Footer.jsx";
 import Navbar from "../components/Navbar.jsx";
 import CtaSection from "../components/CtaSection.jsx";
@@ -90,7 +90,7 @@ const Contact = () => {
                 type="submit"
                 className="w-full px-6 py-3 bg-gradient-to-r from-[#10B981] to-[#3B82F6] text-white rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
               >
-                <PaperAirplaneIcon className="h-5 w-5" />
+                <Send className="h-5 w-5" />
                 Send Message
               </button>
             </form>
@@ -104,7 +104,7 @@ const Contact = () => {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="p-2 bg-[#10B981]/10 rounded-full">
-                    <EnvelopeIcon className="h-5 w-5 text-[#10B981]" />
+                    <Mail className="h-5 w-5 text-[#10B981]" />
                   </div>
                   <div>
                     <h3 className="text-gray-400 text-sm">Email</h3>
@@ -114,7 +114,7 @@ const Contact = () => {
 
                 <div className="flex items-start gap-4">
                   <div className="p-2 bg-[#10B981]/10 rounded-full">
-                    <PhoneIcon className="h-5 w-5 text-[#10B981]" />
+                    <Phone className="h-5 w-5 text-[#10B981]" />
                   </div>
                   <div>
                     <h3 className="text-gray-400 text-sm">Phone</h3>
@@ -124,7 +124,7 @@ const Contact = () => {
 
                 <div className="flex items-start gap-4">
                   <div className="p-2 bg-[#10B981]/10 rounded-full">
-                    <MapPinIcon className="h-5 w-5 text-[#10B981]" />
+                    <MapPin className="h-5 w-5 text-[#10B981]" />
                   </div>
                   <div>
                     <h3 className="text-gray-400 text-sm">Location</h3>
@@ -148,9 +148,6 @@ const Contact = () => {
 
       {/* Footer */}
       <Footer/>
-
-      {/* Fun ASCII art */}
-
     </div>
   );
 };

@@ -1,9 +1,8 @@
 import React from "react";
-import { ShieldCheckIcon, SparklesIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { ShieldCheck, Sparkles, Clock } from "lucide-react";
 import CtaSection from "../components/CtaSection";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-
 
 const About = () => {
   return (
@@ -34,17 +33,17 @@ const About = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {[
             {
-              icon: SparklesIcon,
+              icon: Sparkles,
               title: "Instant Creation",
               description: "Generate new email addresses in one click with our lightning-fast system"
             },
             {
-              icon: ShieldCheckIcon,
+              icon: ShieldCheck,
               title: "Military-Grade Security",
               description: "End-to-end encrypted communications with zero data retention"
             },
             {
-              icon: ClockIcon,
+              icon: Clock,
               title: "Self-Destructing",
               description: "All emails automatically delete after 24 hours"
             }
@@ -98,12 +97,11 @@ const About = () => {
         </div>
       </section>
 
-        {/*Ctasection*/}
-        <CtaSection/>
+      {/* CtaSection */}
+      <CtaSection/>
 
-        {/* Footer */}
-        <Footer/>
-      
+      {/* Footer */}
+      <Footer/>
 
     </div>
   );
