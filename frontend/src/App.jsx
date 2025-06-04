@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
@@ -12,7 +12,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 
 const App = () => {
   return (
-    <Router>
+    
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About/>}/>
@@ -23,7 +23,7 @@ const App = () => {
         <Route path="/terms" element={<Terms/>}/>
         <Route path="" element={<ErrorPage/>}/>
       </Routes>
-    </Router>
+    
   );
 };
 
