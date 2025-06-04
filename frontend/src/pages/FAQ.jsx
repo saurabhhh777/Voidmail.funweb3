@@ -1,5 +1,8 @@
 import { HelpCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import CtaSection from "../components/CtaSection";
 
 const FAQ = () => {
   const faqItems = [
@@ -31,32 +34,20 @@ const FAQ = () => {
 
   return (
     <div className="bg-[#0e0e10] text-white min-h-screen flex flex-col">
-      {/* Navbar - Same as Home */}
-      <nav className="backdrop-blur-lg bg-[#0e0e10]/80 sticky top-0 z-50 flex justify-between items-center px-6 py-4 border-b border-[#ffffff08]">
-        <div className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-          Voidmail
-        </div>
-        <div className="space-x-6 text-sm font-medium hidden md:flex">
-          <Link to="/faq" className="text-indigo-400">FAQ</Link>
-          {['Home', 'About', 'Contact', 'Privacy'].map((item) => (
-            <Link 
-              key={item}
-              to={`/${item.toLowerCase().replace(' ', '-')}`} 
-              className="hover:text-indigo-400 transition-all duration-300"
-            >
-              {item}
-            </Link>
-          ))}
-        </div>
-      </nav>
+      {/* Use your existing Navbar component */}
+      <div className="mt-2 mr-2 ml-2">
+        <Navbar />
+      </div>
 
       {/* FAQ Content */}
-      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="flex-1 max-w-4xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            Frequently Asked Questions
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
+            <span className="bg-gradient-to-r from-[#10B981] to-[#3B82F6] bg-clip-text text-transparent">
+              Frequently Asked Questions
+            </span>
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Quick answers to common questions about Voidmail
           </p>
         </div>
@@ -65,12 +56,14 @@ const FAQ = () => {
           {faqItems.map((item, index) => (
             <div 
               key={index}
-              className="p-6 bg-[#141416] rounded-xl border border-[#ffffff08] hover:border-indigo-500/30 transition-all group"
+              className="p-8 bg-[#151517] rounded-xl border border-[#ffffff08] hover:border-[#10B981]/30 transition-colors group"
             >
               <div className="flex items-start gap-4">
-                <HelpCircle className="h-6 w-6 text-indigo-400 flex-shrink-0 mt-1" />
+                <div className="w-10 h-10 rounded-full bg-[#10B981]/10 flex items-center justify-center flex-shrink-0">
+                  <HelpCircle className="h-5 w-5 text-[#10B981]" />
+                </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">{item.question}</h3>
+                  <h3 className="text-xl font-bold mb-3 text-gray-100">{item.question}</h3>
                   <p className="text-gray-400">{item.answer}</p>
                 </div>
               </div>
@@ -80,11 +73,11 @@ const FAQ = () => {
 
         {/* Support CTA */}
         <div className="mt-16 text-center border-t border-[#ffffff08] pt-16">
-          <div className="inline-flex items-center bg-[#141416] px-8 py-4 rounded-full">
-            <span className="mr-4">Still have questions?</span>
+          <div className="inline-flex items-center bg-[#151517] px-6 py-3 rounded-lg border border-[#ffffff08] hover:border-[#10B981]/30 transition-colors">
+            <span className="mr-3 text-gray-300">Still have questions?</span>
             <Link 
               to="/contact" 
-              className="inline-flex items-center text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="inline-flex items-center text-[#10B981] hover:text-[#3B82F6] transition-colors"
             >
               Contact Support
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -93,21 +86,11 @@ const FAQ = () => {
         </div>
       </main>
 
-      {/* Footer - Same as Home */}
-      <footer className="text-center py-8 text-sm text-gray-500 border-t border-[#ffffff08]">
-        <div className="flex justify-center gap-6 mb-4">
-          {['Terms', 'Privacy', 'Contact', 'FAQ'].map((item) => (
-            <Link 
-              key={item}
-              to={`/${item.toLowerCase()}`} 
-              className="hover:text-indigo-400 transition-colors"
-            >
-              {item}
-            </Link>
-          ))}
-        </div>
-        <div>&copy; {new Date().getFullYear()} Voidmail.fun • Open Source & Privacy First</div>
-      </footer>
+      {/* CTA Section */}
+      <CtaSection />
+
+      {/* Use your existing Footer component */}
+      <Footer />
     </div>
   );
 };
