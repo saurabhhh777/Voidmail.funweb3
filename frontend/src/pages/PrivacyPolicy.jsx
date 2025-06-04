@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ShieldCheckIcon, LockClosedIcon, DatabaseIcon, ServerIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { ShieldCheckIcon, LockClosedIcon, ServerIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CtaSection from "../components/CtaSection";
