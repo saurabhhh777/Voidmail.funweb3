@@ -1,8 +1,12 @@
-# VoidMail.fun 💌 - Web3 Native Email Platform
+    # VoidMail.fun 💌 - Web3 Native Email Platform
 
 **VoidMail.fun** is a revolutionary Web3-native temporary email service that combines privacy-first disposable emails with blockchain-powered custom email addresses and NFT ownership. Built for the Solana ecosystem, it offers instant temporary emails and premium custom domains with NFT certificates.
 
-![VoidMail Screenshot](https://github.com/user-attachments/assets/baef97d0-963d-461d-8c8b-aa2512a2e12c)
+---
+
+##Screenshort
+<img width="1920" height="974" alt="Image" src="https://github.com/user-attachments/assets/fe35325e-a832-450a-bbff-b7ad156da1ba" />
+
 
 ---
 
