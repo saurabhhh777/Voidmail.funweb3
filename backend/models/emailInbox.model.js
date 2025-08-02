@@ -1,38 +1,41 @@
 import mongoose from "mongoose";
 
 const emailInboxSchema = new mongoose.Schema({
-    sessionToken:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'UserSession',
-        required: true,
-        default: null,
-    },
-    to:{
+    to: {
         type: String,
         required: true,
-        default: null,
+        index: true
     },
-    from:{
-        type:String,
-        required: true,
-        default: null,
+    from: {
+        type: String,
+        required: true
     },
-    subject:{
-        type:String,
-        required: true,
-        default: null,
+    subject: {
+        type: String,
+        default: "No Subject"
     },
-    text:{
-        type:String,
-        required: true,
-        default: null,
+    text: {
+        type: String,
+        default: ""
     },
-    html:{
-        type:String,
-        required: true,
-        default: null,
+    html: {
+        type: String,
+        default: ""
     },
-},{timestamps: true});
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    attachments: [{
+        filename: String,
+        contentType: String,
+        size: Number,
+        content: Buffer
+    }]
+}, { timestamps: true });
+
+// Index for better query performance
+emailInboxSchema.index({ to: 1, createdAt: -1 });
 
 const EmailInbox = mongoose.model("EmailInbox", emailInboxSchema);
 
