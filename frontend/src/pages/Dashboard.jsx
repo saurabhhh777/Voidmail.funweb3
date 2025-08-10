@@ -19,6 +19,8 @@ import { toast } from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+import CtaSection from "../components/CtaSection";
+
 const Dashboard = () => {
   const { connected, publicKey } = useWallet();
   const { 
@@ -521,6 +523,9 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* CtaSection */}
+      <CtaSection/>
 
       <Footer />
     </div>

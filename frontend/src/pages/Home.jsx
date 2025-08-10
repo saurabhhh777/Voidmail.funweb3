@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Crown, Sparkles, Shield, Zap } from "lucide-react";
 import Navbar from "../components/Navbar";
-
+import Footer from "../components/Footer";
+import CtaSection from "../components/CtaSection";
 const Home = () => {
   return (
     <div className="bg-[#0e0e10] text-white min-h-screen flex flex-col">
@@ -136,6 +137,12 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* CtaSection */}
+      <CtaSection/>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

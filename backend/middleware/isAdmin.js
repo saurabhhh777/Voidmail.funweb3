@@ -1,5 +1,5 @@
 import AdminWallet from '../models/admin.model.js';
-import authenticateSession from './auth.js';
+import { auth as authenticateSession } from './auth.js';
 
 const isAdmin = async (req, res, next) => {
   try {

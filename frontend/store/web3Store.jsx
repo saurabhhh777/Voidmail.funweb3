@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Program, AnchorProvider, web3, utils, BN } from "@coral-xyz/anchor";
-import { getAssociatedTokenAddress } from "@solana/spl-token";
+import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { axiosInstance } from "../lib/axios";
 import IDL from "../src/idl/voidmail_nft.json";
 
@@ -31,26 +31,47 @@ export const useWeb3Store = create(
       // Connect wallet
       connectWallet: async (wallet) => {
         try {
+          console.log('=== CONNECT WALLET START ===');
+          console.log('Input wallet:', wallet);
+          console.log('Current store state:', {
+            isConnected: get().isConnected,
+            walletAddress: get().walletAddress,
+            wallet: !!get().wallet
+          });
+          
           set({ isLoading: true, error: null });
           
           if (!wallet) {
             throw new Error("No wallet provided");
           }
 
-          await wallet.connect();
+          console.log('Connecting wallet:', wallet);
+          console.log('Wallet public key before connect:', wallet.publicKey?.toString());
+
+          // Only call connect if not already connected
+          if (!wallet.publicKey) {
+            console.log('Wallet not connected, calling wallet.connect()');
+            await wallet.connect();
+            console.log('Wallet.connect() completed');
+          }
+          
           const publicKey = wallet.publicKey;
+          console.log('Wallet public key after connect:', publicKey?.toString());
           
           if (!publicKey) {
             throw new Error("Failed to get wallet public key");
           }
 
+          console.log('Creating connection and provider...');
           // Create connection and provider
           const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
           const provider = new AnchorProvider(connection, wallet, { commitment: "confirmed" });
 
+          console.log('Loading program with IDL...');
           // Load program with IDL
           const program = new Program(IDL, PROGRAM_ID, provider);
 
+          console.log('Setting wallet state...');
           set({
             wallet,
             walletAddress: publicKey.toString(),
@@ -60,14 +81,39 @@ export const useWeb3Store = create(
             isLoading: false
           });
 
-          // Get wallet balance
-          const balance = await connection.getBalance(publicKey);
-          set({ balance: balance / LAMPORTS_PER_SOL });
+          console.log('Wallet state set successfully');
 
-          // Create user session on backend
-          await get().createUserSession();
+          // Get wallet balance
+          try {
+            console.log('Getting wallet balance...');
+            const balance = await connection.getBalance(publicKey);
+            set({ balance: balance / LAMPORTS_PER_SOL });
+            console.log('Wallet balance:', balance / LAMPORTS_PER_SOL);
+          } catch (balanceError) {
+            console.error('Error getting balance:', balanceError);
+            set({ balance: 0 });
+          }
+
+          // Create user session on backend (optional - don't fail if this fails)
+          try {
+            console.log('Creating user session...');
+            await get().createUserSession();
+            console.log('User session created successfully');
+          } catch (sessionError) {
+            console.error('Error creating user session:', sessionError);
+            // Don't throw error - session creation is optional
+          }
+
+          console.log('=== CONNECT WALLET COMPLETED SUCCESSFULLY ===');
+          console.log('Final store state:', {
+            isConnected: get().isConnected,
+            walletAddress: get().walletAddress,
+            wallet: !!get().wallet
+          });
 
         } catch (error) {
+          console.error('=== CONNECT WALLET FAILED ===');
+          console.error('Error in connectWallet:', error);
           set({
             error: error.message,
             isLoading: false
@@ -79,11 +125,20 @@ export const useWeb3Store = create(
       // Disconnect wallet
       disconnectWallet: async () => {
         try {
+          console.log('Disconnecting wallet from store...');
           const { wallet } = get();
+          
           if (wallet) {
-            await wallet.disconnect();
+            try {
+              await wallet.disconnect();
+              console.log('Wallet adapter disconnected');
+            } catch (adapterError) {
+              console.error('Error disconnecting wallet adapter:', adapterError);
+              // Continue with store cleanup even if adapter disconnect fails
+            }
           }
 
+          console.log('Clearing store state...');
           set({
             wallet: null,
             walletAddress: null,
@@ -91,13 +146,77 @@ export const useWeb3Store = create(
             balance: 0,
             program: null,
             provider: null,
-            customEmails: []
+            customEmails: [],
+            userCredits: 0,
+            error: null
           });
 
-          // Clear session on backend
-          await axiosInstance.post("/api/v1/user/logout");
+          // Clear session on backend (optional - don't fail if this fails)
+          try {
+            await axiosInstance.post("/api/v1/user/logout");
+            console.log('Backend session cleared');
+          } catch (sessionError) {
+            console.error('Error clearing backend session:', sessionError);
+            // Don't throw error - session clearing is optional
+          }
+
+          console.log('Wallet disconnect completed successfully');
         } catch (error) {
           console.error("Error disconnecting wallet:", error);
+          // Even if there's an error, try to clear the store state
+          set({
+            wallet: null,
+            walletAddress: null,
+            isConnected: false,
+            balance: 0,
+            program: null,
+            provider: null,
+            customEmails: [],
+            userCredits: 0,
+            error: null
+          });
+        }
+      },
+
+      // Check and restore wallet connection state
+      checkWalletConnection: async () => {
+        try {
+          const { wallet, isConnected } = get();
+          
+          // If we have a wallet but not connected, try to restore connection
+          if (wallet && !isConnected) {
+            console.log('Restoring wallet connection...');
+            await get().connectWallet(wallet);
+          }
+        } catch (error) {
+          console.error("Error checking wallet connection:", error);
+        }
+      },
+
+      // Refresh wallet balance
+      refreshBalance: async () => {
+        try {
+          const { wallet, walletAddress } = get();
+          
+          if (!wallet || !walletAddress) {
+            console.log('No wallet connected, cannot refresh balance');
+            return;
+          }
+
+          console.log('Refreshing wallet balance...');
+          const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
+          const publicKey = new PublicKey(walletAddress);
+          
+          const balance = await connection.getBalance(publicKey);
+          const solBalance = balance / LAMPORTS_PER_SOL;
+          
+          set({ balance: solBalance });
+          console.log('Balance refreshed:', solBalance, 'SOL');
+          
+          return solBalance;
+        } catch (error) {
+          console.error('Error refreshing balance:', error);
+          throw error;
         }
       },
 
@@ -126,42 +245,43 @@ export const useWeb3Store = create(
         try {
           set({ isLoading: true, error: null });
 
-          const { wallet, walletAddress, program } = get();
+          const { walletAddress } = get();
 
-          if (!wallet || !walletAddress || !program) {
+          if (!walletAddress) {
+            throw new Error("Wallet not connected");
+          }
+
+          // Step 1: Call backend to get payment details
+          const paymentResponse = await axiosInstance.post("/api/v1/credit/purchase", {
+            credits,
+            walletAddress
+          });
+
+          if (!paymentResponse.data.success) {
+            throw new Error(paymentResponse.data.message || "Failed to get payment details");
+          }
+
+          const { expectedAmount, expectedSol, programId } = paymentResponse.data.data;
+
+          // Step 2: Process payment through smart contract
+          const { wallet, program } = get();
+
+          if (!wallet || !program) {
             throw new Error("Wallet not connected or program not loaded");
           }
-
-          // Validate credits amount
-          const validCredits = [1, 2, 3, 5, 10];
-          if (!validCredits.includes(credits)) {
-            throw new Error("Invalid credits amount");
-          }
-
-          // Get required SOL amount
-          const solAmounts = {
-            1: 0.025,
-            2: 0.045,
-            3: 0.060,
-            5: 0.090,
-            10: 0.150
-          };
-
-          const requiredSOL = solAmounts[credits];
-          const requiredLamports = requiredSOL * LAMPORTS_PER_SOL;
 
           // Check if user has enough SOL
           const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
           const balance = await connection.getBalance(wallet.publicKey);
 
-          if (balance < requiredLamports) {
-            throw new Error(`Insufficient SOL balance. Need ${requiredSOL} SOL for ${credits} credits.`);
+          if (balance < expectedAmount) {
+            throw new Error(`Insufficient SOL balance. Need ${expectedSol} SOL for ${credits} credits.`);
           }
 
           // Create vault PDA
           const [vaultPda] = PublicKey.findProgramAddressSync(
             [Buffer.from("vault")],
-            program.programId
+            new PublicKey(programId)
           );
 
           // Call smart contract to purchase credits
@@ -175,12 +295,16 @@ export const useWeb3Store = create(
             })
             .rpc();
 
-          // Verify purchase on backend
-          const response = await axiosInstance.post("/api/v1/credit/verify-purchase", {
+          // Step 3: Verify purchase on backend
+          const verifyResponse = await axiosInstance.post("/api/v1/credit/verify-purchase", {
             transactionHash: tx,
             credits,
             walletAddress
           });
+
+          if (!verifyResponse.data.success) {
+            throw new Error(verifyResponse.data.message || "Failed to verify purchase");
+          }
 
           // Update user credits
           await get().getUserCredits();
@@ -188,7 +312,7 @@ export const useWeb3Store = create(
           set({ isLoading: false });
 
           return {
-            ...response.data,
+            ...verifyResponse.data,
             transactionHash: tx
           };
         } catch (error) {
@@ -234,7 +358,7 @@ export const useWeb3Store = create(
               user: wallet.publicKey,
               mint: mint.publicKey,
               userTokenAccount: userTokenAccount,
-              tokenProgram: web3.TokenProgram.programId,
+              tokenProgram: TOKEN_PROGRAM_ID,
               systemProgram: web3.SystemProgram.programId,
             })
             .signers([mint])

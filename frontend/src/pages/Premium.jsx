@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Crown, Sparkles, Shield, Zap, CheckCircle, ExternalLink, Coins } from 'lucide-react';
 import { useWeb3Store } from '../../store/web3Store';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-hot-toast';
 import PaymentConfirmation from '../components/PaymentConfirmation';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const Premium = () => {
+  const { wallet, connected: adapterConnected } = useWallet();
   const { 
     isConnected, 
     walletAddress, 
@@ -17,6 +19,9 @@ const Premium = () => {
     customEmails, 
     getCustomEmails,
     getUserCredits,
+    checkWalletConnection,
+    connectWallet,
+    refreshBalance,
     isLoading,
     error 
   } = useWeb3Store();
@@ -29,6 +34,7 @@ const Premium = () => {
   const [transactionHash, setTransactionHash] = useState(null);
   const [paymentError, setPaymentError] = useState(null);
   const [activeTab, setActiveTab] = useState('credits');
+  const [isRefreshingBalance, setIsRefreshingBalance] = useState(false);
 
   const premiumDomains = [
     { name: 'voidmail.fun', price: '1 Credit', popular: true, description: 'Most popular domain' },
@@ -46,18 +52,53 @@ const Premium = () => {
   ];
 
   useEffect(() => {
+    // Check wallet connection state on mount
+    checkWalletConnection();
+  }, [checkWalletConnection]);
+
+  useEffect(() => {
     if (isConnected) {
       getCustomEmails();
       getUserCredits();
+      // Refresh balance when connected
+      refreshBalance();
     }
   }, [isConnected]);
 
+  // Auto-refresh balance every 30 seconds when connected
+  useEffect(() => {
+    if (!isConnected) return;
+
+    const interval = setInterval(() => {
+      refreshBalance().catch(error => {
+        console.error('Auto-refresh balance failed:', error);
+      });
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [isConnected, refreshBalance]);
+
   const handlePurchaseCredits = async (credits) => {
     try {
+      console.log('Purchase Credits Debug:', {
+        adapterConnected,
+        storeConnected: isConnected,
+        walletAddress,
+        balance,
+        userCredits
+      });
+
+      // Check both adapter and store connection state
+      if (!adapterConnected || !isConnected) {
+        console.log('Wallet not connected, showing error');
+        toast.error('Please connect your wallet first');
+        return;
+      }
+
       setSelectedCredits(credits);
       setShowCreditModal(true);
     } catch (error) {
-      toast.error(error.message || 'Failed to purchase credits');
+      toast.error(error.message || 'Failed to initiate credit purchase');
     }
   };
 
@@ -66,16 +107,22 @@ const Premium = () => {
       setPaymentError(null);
       setTransactionHash(null);
       
+      toast.loading('Processing payment through smart contract...', { id: 'payment' });
+      
       const result = await purchaseCredits(selectedCredits);
       
       if (result.transactionHash) {
         setTransactionHash(result.transactionHash);
-        toast.success(`${selectedCredits} credits purchased successfully!`);
+        toast.success(`${selectedCredits} credits purchased successfully!`, { id: 'payment' });
         setShowCreditModal(false);
+        
+        // Refresh user data and balance
+        await getUserCredits();
+        await refreshBalance();
       }
     } catch (error) {
       setPaymentError(error.message || 'Payment failed');
-      toast.error(error.message || 'Failed to purchase credits');
+      toast.error(error.message || 'Failed to purchase credits', { id: 'payment' });
     }
   };
 
@@ -117,6 +164,10 @@ const Premium = () => {
         toast.success('Custom email created successfully! NFT minted.');
         setPrefix('');
         setSelectedDomain('');
+        
+        // Refresh user data and balance
+        await getUserCredits();
+        await refreshBalance();
       }
     } catch (error) {
       setPaymentError(error.message || 'Payment failed');
@@ -157,7 +208,7 @@ const Premium = () => {
         </div>
 
         {/* Wallet Info - Show only if connected */}
-        {isConnected && (
+        {(adapterConnected || isConnected) && (
           <div className="bg-[#151517] rounded-2xl border border-[#ffffff08] p-6 mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -168,6 +219,9 @@ const Premium = () => {
                   <p className="text-sm text-gray-400">Connected Wallet</p>
                   <p className="font-mono text-sm">
                     {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-4)}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Adapter: {adapterConnected ? '✅' : '❌'} | Store: {isConnected ? '✅' : '❌'}
                   </p>
                 </div>
               </div>
@@ -180,13 +234,61 @@ const Premium = () => {
                   <p className="text-sm text-gray-400">Credits</p>
                   <p className="text-[#3B82F6] font-semibold">{userCredits}</p>
                 </div>
+                <button
+                  onClick={checkWalletConnection}
+                  className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs"
+                  title="Sync wallet state"
+                >
+                  🔄 Sync
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      setIsRefreshingBalance(true);
+                      console.log('Manual refresh balance...');
+                      await refreshBalance();
+                      toast.success('Balance refreshed successfully!');
+                    } catch (error) {
+                      console.error('Manual refresh failed:', error);
+                      toast.error('Failed to refresh balance: ' + error.message);
+                    } finally {
+                      setIsRefreshingBalance(false);
+                    }
+                  }}
+                  disabled={isRefreshingBalance}
+                  className={`px-3 py-1 text-white rounded text-xs ${
+                    isRefreshingBalance 
+                      ? 'bg-gray-500 cursor-not-allowed' 
+                      : 'bg-purple-600 hover:bg-purple-700'
+                  }`}
+                  title="Refresh balance"
+                >
+                  {isRefreshingBalance ? '⏳' : '💰'} Refresh
+                </button>
+                {adapterConnected && !isConnected && (
+                  <button
+                    onClick={() => {
+                      console.log('Manual connection attempt...');
+                      if (wallet?.adapter) {
+                        connectWallet(wallet.adapter).catch(error => {
+                          console.error('Manual connection failed:', error);
+                          toast.error('Manual connection failed: ' + error.message);
+                        });
+                      }
+                    }}
+                    className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs"
+                    title="Manual connect"
+                  >
+                    🔗 Connect
+                  </button>
+                )}
               </div>
             </div>
           </div>
         )}
 
         {/* Tab Navigation - Show only if connected */}
-        {isConnected && (
+        {(adapterConnected || isConnected) && (
           <div className="flex space-x-1 bg-[#151517] rounded-lg p-1 mb-8">
             <button
               onClick={() => setActiveTab('credits')}
@@ -300,7 +402,7 @@ const Premium = () => {
         )}
 
         {/* Create Email Tab - Show only if connected */}
-        {isConnected && activeTab === 'create' && (
+        {(adapterConnected || isConnected) && activeTab === 'create' && (
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Create Email Form */}
             <div className="lg:col-span-2">

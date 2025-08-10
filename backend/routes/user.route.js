@@ -11,19 +11,19 @@ import {
   checkEmailAvailability
 } from "../controllers/user.controller.js";
 
-import authenticateSession from "../middleware/auth.js";
+import { auth } from "../middleware/auth.js";
 
 // Authentication routes
 route.route('/session').post(createUserSession);
 route.route('/logout').post(logoutUser);
 
 // Protected routes
-route.route('/profile').get(authenticateSession, getUserProfile);
-route.route('/email').post(authenticateSession, createEmail);
+route.route('/profile').get(auth, getUserProfile);
+route.route('/email').post(auth, createEmail);
 
 // Custom email routes
-route.route('/createCustomEmail').post(authenticateSession, createCustomEmail);
-route.route('/customEmails').get(authenticateSession, getCustomEmails);
-route.route('/checkEmailAvailability').post(authenticateSession, checkEmailAvailability);
+route.route('/createCustomEmail').post(auth, createCustomEmail);
+route.route('/customEmails').get(auth, getCustomEmails);
+route.route('/checkEmailAvailability').post(auth, checkEmailAvailability);
 
 export default route;

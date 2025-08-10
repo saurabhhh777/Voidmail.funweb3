@@ -41,4 +41,4 @@ const authenticateSession = async (req, res, next) => {
   }
 };
 
-export default authenticateSession;
+export { authenticateSession as auth };
