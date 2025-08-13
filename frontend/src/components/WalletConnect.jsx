@@ -9,9 +9,10 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 
 const WalletConnect = () => {
   const { wallet, connected } = useWallet();
-  const { connectWallet, disconnectWallet, isConnected } = useWeb3Store();
+  const { connectWallet, disconnectWallet, isConnected, syncWalletState } = useWeb3Store();
   const [hasWallet, setHasWallet] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const checkWalletAvailability = () => {
     const hasPhantom = window.solana?.isPhantom || window.phantom?.solana?.isPhantom;
@@ -53,9 +54,16 @@ const WalletConnect = () => {
       });
       connectWallet(wallet.adapter).catch(error => {
         console.error('Error connecting wallet on mount:', error);
+        // If there's a BN error, try syncing instead
+        if (error.message.includes('_bn')) {
+          console.log('BN error detected, trying sync instead...');
+          syncWalletState().catch(syncError => {
+            console.error('Sync also failed:', syncError);
+          });
+        }
       });
     }
-  }, [connected, wallet, isConnected, connectWallet]); // Add dependencies
+  }, [connected, wallet, isConnected, connectWallet, syncWalletState]);
 
   // Sync adapter connection to our store
   useEffect(() => {
@@ -65,8 +73,18 @@ const WalletConnect = () => {
         
         if (connected && wallet?.adapter) {
           console.log('Wallet connected, syncing to store...');
-          const result = await connectWallet(wallet.adapter);
-          console.log('Connect wallet result:', result);
+          try {
+            const result = await connectWallet(wallet.adapter);
+            console.log('Connect wallet result:', result);
+          } catch (connectError) {
+            console.error('Connect failed, trying sync:', connectError);
+            // If connect fails due to BN issues, try sync
+            if (connectError.message.includes('_bn')) {
+              await syncWalletState();
+            } else {
+              throw connectError;
+            }
+          }
         } else if (!connected) {
           console.log('Wallet disconnected, syncing to store...');
           // Ensure store reflects disconnect state
@@ -81,7 +99,7 @@ const WalletConnect = () => {
     // Add a small delay to ensure wallet adapter is fully initialized
     const timer = setTimeout(syncWalletState, 100);
     return () => clearTimeout(timer);
-  }, [connected, wallet, connectWallet, disconnectWallet]);
+  }, [connected, wallet, connectWallet, disconnectWallet, syncWalletState]);
 
   // Additional sync check that runs more frequently
   useEffect(() => {
@@ -90,14 +108,38 @@ const WalletConnect = () => {
       const syncTimer = setTimeout(() => {
         connectWallet(wallet.adapter).catch(error => {
           console.error('Additional sync failed:', error);
+          // Try sync method if connect fails
+          if (error.message.includes('_bn')) {
+            syncWalletState().catch(syncError => {
+              console.error('Sync also failed:', syncError);
+            });
+          }
         });
       }, 500);
       return () => clearTimeout(syncTimer);
     }
-  }, [connected, wallet, isConnected, connectWallet]);
+  }, [connected, wallet, isConnected, connectWallet, syncWalletState]);
 
   const handleManualCheck = () => {
     checkWalletAvailability();
+  };
+
+  const handleManualSync = async () => {
+    try {
+      setIsSyncing(true);
+      console.log('Manual sync button clicked');
+      const success = await syncWalletState();
+      if (success) {
+        toast.success('Wallet synced successfully!');
+      } else {
+        toast.error('Failed to sync wallet state');
+      }
+    } catch (error) {
+      console.error('Manual sync failed:', error);
+      toast.error('Manual sync failed: ' + error.message);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handleDisconnect = async () => {
@@ -156,19 +198,16 @@ const WalletConnect = () => {
           </div>
           {!isConnected && (
             <button
-              onClick={() => {
-                console.log('Manual sync button clicked');
-                if (wallet?.adapter) {
-                  connectWallet(wallet.adapter).catch(error => {
-                    console.error('Manual sync failed:', error);
-                    toast.error('Manual sync failed: ' + error.message);
-                  });
-                }
-              }}
-              className="px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-xs"
+              onClick={handleManualSync}
+              disabled={isSyncing}
+              className={`px-3 py-1 text-white rounded text-xs ${
+                isSyncing 
+                  ? 'bg-gray-500 cursor-not-allowed' 
+                  : 'bg-yellow-600 hover:bg-yellow-700'
+              }`}
               title="Sync wallet to store"
             >
-              🔄 Sync Store
+              {isSyncing ? '⏳' : '🔄'} Sync Store
             </button>
           )}
           <button

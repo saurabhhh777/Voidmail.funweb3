@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Crown, Sparkles, Shield, Zap, CheckCircle, ExternalLink, Coins } from 'lucide-react';
+import { Crown, Sparkles, Shield, Zap, CheckCircle, ExternalLink, Coins, Wallet } from 'lucide-react';
 import { useWeb3Store } from '../../store/web3Store';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-hot-toast';
@@ -22,6 +22,7 @@ const Premium = () => {
     checkWalletConnection,
     connectWallet,
     refreshBalance,
+    syncWalletState,
     isLoading,
     error 
   } = useWeb3Store();
@@ -35,6 +36,7 @@ const Premium = () => {
   const [paymentError, setPaymentError] = useState(null);
   const [activeTab, setActiveTab] = useState('credits');
   const [isRefreshingBalance, setIsRefreshingBalance] = useState(false);
+  const [isSyncingWallet, setIsSyncingWallet] = useState(false);
 
   const premiumDomains = [
     { name: 'voidmail.fun', price: '1 Credit', popular: true, description: 'Most popular domain' },
@@ -77,6 +79,24 @@ const Premium = () => {
 
     return () => clearInterval(interval);
   }, [isConnected, refreshBalance]);
+
+  const handleSyncWallet = async () => {
+    try {
+      setIsSyncingWallet(true);
+      console.log('Manual wallet sync...');
+      const success = await syncWalletState();
+      if (success) {
+        toast.success('Wallet synced successfully!');
+      } else {
+        toast.error('Failed to sync wallet state');
+      }
+    } catch (error) {
+      console.error('Manual sync failed:', error);
+      toast.error('Sync failed: ' + error.message);
+    } finally {
+      setIsSyncingWallet(false);
+    }
+  };
 
   const handlePurchaseCredits = async (credits) => {
     try {
@@ -207,39 +227,26 @@ const Premium = () => {
           </p>
         </div>
 
-        {/* Wallet Info - Show only if connected */}
+        {/* Wallet Balance Section - Always show if wallet is connected */}
         {(adapterConnected || isConnected) && (
           <div className="bg-[#151517] rounded-2xl border border-[#ffffff08] p-6 mb-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#10B981]/10 rounded-full flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-[#10B981]" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-400">Connected Wallet</p>
-                  <p className="font-mono text-sm">
-                    {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-4)}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Adapter: {adapterConnected ? '✅' : '❌'} | Store: {isConnected ? '✅' : '❌'}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
-                  <p className="text-sm text-gray-400">Balance</p>
-                  <p className="text-[#10B981] font-semibold">{balance.toFixed(4)} SOL</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-400">Credits</p>
-                  <p className="text-[#3B82F6] font-semibold">{userCredits}</p>
-                </div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <Wallet className="h-5 w-5 text-[#10B981]" />
+                Wallet Balance
+              </h2>
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={checkWalletConnection}
-                  className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs"
+                  onClick={handleSyncWallet}
+                  disabled={isSyncingWallet}
+                  className={`px-3 py-1 text-white rounded text-xs ${
+                    isSyncingWallet 
+                      ? 'bg-gray-500 cursor-not-allowed' 
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
                   title="Sync wallet state"
                 >
-                  🔄 Sync
+                  {isSyncingWallet ? '⏳' : '🔄'} Sync
                 </button>
                 <button
                   onClick={async () => {
@@ -265,25 +272,48 @@ const Premium = () => {
                 >
                   {isRefreshingBalance ? '⏳' : '💰'} Refresh
                 </button>
-                {adapterConnected && !isConnected && (
-                  <button
-                    onClick={() => {
-                      console.log('Manual connection attempt...');
-                      if (wallet?.adapter) {
-                        connectWallet(wallet.adapter).catch(error => {
-                          console.error('Manual connection failed:', error);
-                          toast.error('Manual connection failed: ' + error.message);
-                        });
-                      }
-                    }}
-                    className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs"
-                    title="Manual connect"
-                  >
-                    🔗 Connect
-                  </button>
-                )}
               </div>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Wallet Address */}
+              <div className="bg-[#0e0e10] rounded-xl p-4 border border-[#ffffff08]">
+                <p className="text-sm text-gray-400 mb-2">Connected Wallet</p>
+                <p className="font-mono text-sm text-[#10B981]">
+                  {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-4)}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Adapter: {adapterConnected ? '✅' : '❌'} | Store: {isConnected ? '✅' : '❌'}
+                </p>
+              </div>
+              
+              {/* SOL Balance */}
+              <div className="bg-[#0e0e10] rounded-xl p-4 border border-[#ffffff08]">
+                <p className="text-sm text-gray-400 mb-2">SOL Balance</p>
+                <p className="text-2xl font-bold text-[#10B981]">
+                  {balance.toFixed(4)} SOL
+                </p>
+                <p className="text-xs text-gray-500 mt-1">Testnet Solana</p>
+              </div>
+              
+              {/* Credits */}
+              <div className="bg-[#0e0e10] rounded-xl p-4 border border-[#ffffff08]">
+                <p className="text-sm text-gray-400 mb-2">Available Credits</p>
+                <p className="text-2xl font-bold text-[#3B82F6]">
+                  {userCredits}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">For custom emails</p>
+              </div>
+            </div>
+            
+            {/* Connection Status */}
+            {adapterConnected && !isConnected && (
+              <div className="mt-4 p-3 bg-yellow-600/10 border border-yellow-600/30 rounded-lg">
+                <p className="text-sm text-yellow-400">
+                  ⚠️ Wallet adapter connected but store not synced. Click "Sync" to fix this.
+                </p>
+              </div>
+            )}
           </div>
         )}
 

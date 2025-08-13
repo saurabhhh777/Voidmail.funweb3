@@ -46,17 +46,26 @@ export const useWeb3Store = create(
           }
 
           console.log('Connecting wallet:', wallet);
-          console.log('Wallet public key before connect:', wallet.publicKey?.toString());
-
-          // Only call connect if not already connected
-          if (!wallet.publicKey) {
-            console.log('Wallet not connected, calling wallet.connect()');
-            await wallet.connect();
-            console.log('Wallet.connect() completed');
+          
+          // Safely get public key without accessing _bn property
+          let publicKey = null;
+          try {
+            if (wallet.publicKey) {
+              // Handle both string and PublicKey formats
+              if (typeof wallet.publicKey === 'string') {
+                publicKey = new PublicKey(wallet.publicKey);
+              } else if (wallet.publicKey.toBase58) {
+                publicKey = wallet.publicKey;
+              } else {
+                throw new Error("Invalid public key format");
+              }
+            }
+          } catch (pkError) {
+            console.error('Error getting public key:', pkError);
+            throw new Error("Failed to get wallet public key: " + pkError.message);
           }
           
-          const publicKey = wallet.publicKey;
-          console.log('Wallet public key after connect:', publicKey?.toString());
+          console.log('Wallet public key:', publicKey?.toString());
           
           if (!publicKey) {
             throw new Error("Failed to get wallet public key");
@@ -200,7 +209,7 @@ export const useWeb3Store = create(
           
           if (!wallet || !walletAddress) {
             console.log('No wallet connected, cannot refresh balance');
-            return;
+            return 0;
           }
 
           console.log('Refreshing wallet balance...');
@@ -216,7 +225,57 @@ export const useWeb3Store = create(
           return solBalance;
         } catch (error) {
           console.error('Error refreshing balance:', error);
-          throw error;
+          set({ balance: 0 });
+          return 0;
+        }
+      },
+
+      // Sync wallet state (new method to handle sync issues)
+      syncWalletState: async () => {
+        try {
+          const { wallet, isConnected } = get();
+          
+          if (!wallet) {
+            console.log('No wallet available for sync');
+            return false;
+          }
+
+          // Check if wallet is actually connected
+          let isWalletConnected = false;
+          try {
+            if (wallet.connected !== undefined) {
+              isWalletConnected = wallet.connected;
+            } else if (wallet.publicKey) {
+              isWalletConnected = true;
+            }
+          } catch (error) {
+            console.error('Error checking wallet connection state:', error);
+            isWalletConnected = false;
+          }
+
+          console.log('Wallet sync check:', {
+            walletConnected: isWalletConnected,
+            storeConnected: isConnected
+          });
+
+          // If wallet is connected but store shows disconnected, sync
+          if (isWalletConnected && !isConnected) {
+            console.log('Syncing wallet to store...');
+            await get().connectWallet(wallet);
+            return true;
+          }
+
+          // If wallet is disconnected but store shows connected, sync
+          if (!isWalletConnected && isConnected) {
+            console.log('Syncing store to wallet disconnect...');
+            await get().disconnectWallet();
+            return true;
+          }
+
+          return true;
+        } catch (error) {
+          console.error('Error syncing wallet state:', error);
+          return false;
         }
       },
 
