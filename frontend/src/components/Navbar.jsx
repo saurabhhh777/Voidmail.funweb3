@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Crown } from "lucide-react";
-import WalletConnect from "./WalletConnect";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -51,7 +50,7 @@ const Navbar = () => {
             <Crown className="h-4 w-4" />
             Premium
           </button>
-          <WalletConnect />
+          {/* WalletConnect temporarily removed */}
         </div>
       </div>
     </nav>

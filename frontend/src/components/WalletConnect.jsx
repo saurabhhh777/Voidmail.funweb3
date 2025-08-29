@@ -15,25 +15,41 @@ const WalletConnect = () => {
   const [isSyncing, setIsSyncing] = useState(false);
 
   const checkWalletAvailability = () => {
-    const hasPhantom = window.solana?.isPhantom || window.phantom?.solana?.isPhantom;
-    const hasSolflare = window.solflare?.isSolflare;
-    
-    const walletAvailable = hasPhantom || hasSolflare;
-    setHasWallet(walletAvailable);
-    
-    if (!walletAvailable) {
-      toast.error(
-        'No Solana wallet found! Please install Phantom or Solflare wallet extension.',
-        {
-          duration: 5000,
-          position: 'top-center',
-          style: {
-            background: '#1f2937',
-            color: '#fff',
-            border: '1px solid #374151',
-          },
-        }
-      );
+    try {
+      // More robust wallet detection for Brave browser
+      const hasPhantom = !!(window.solana?.isPhantom || window.phantom?.solana?.isPhantom);
+      const hasSolflare = !!window.solflare?.isSolflare;
+      
+      // Additional check for Brave's built-in wallet
+      const hasBraveWallet = !!window.braveSolana?.isBraveWallet;
+      
+      const walletAvailable = hasPhantom || hasSolflare || hasBraveWallet;
+      setHasWallet(walletAvailable);
+      
+      console.log('Wallet availability check:', {
+        hasPhantom,
+        hasSolflare,
+        hasBraveWallet,
+        walletAvailable
+      });
+      
+      if (!walletAvailable) {
+        toast.error(
+          'No Solana wallet found! Please install Phantom, Solflare, or Brave wallet extension.',
+          {
+            duration: 5000,
+            position: 'top-center',
+            style: {
+              background: '#1f2937',
+              color: '#fff',
+              border: '1px solid #374151',
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Error checking wallet availability:', error);
+      setHasWallet(false);
     }
   };
 
@@ -52,16 +68,26 @@ const WalletConnect = () => {
         connected: wallet.adapter.connected,
         wallet: wallet.adapter.name
       });
-      connectWallet(wallet.adapter).catch(error => {
-        console.error('Error connecting wallet on mount:', error);
-        // If there's a BN error, try syncing instead
-        if (error.message.includes('_bn')) {
-          console.log('BN error detected, trying sync instead...');
-          syncWalletState().catch(syncError => {
-            console.error('Sync also failed:', syncError);
-          });
+      
+      // Add error handling for wallet connection
+      const handleWalletConnection = async () => {
+        try {
+          await connectWallet(wallet.adapter);
+        } catch (error) {
+          console.error('Error connecting wallet on mount:', error);
+          // If there's a BN error, try syncing instead
+          if (error.message && error.message.includes('_bn')) {
+            console.log('BN error detected, trying sync instead...');
+            try {
+              await syncWalletState();
+            } catch (syncError) {
+              console.error('Sync also failed:', syncError);
+            }
+          }
         }
-      });
+      };
+      
+      handleWalletConnection();
     }
   }, [connected, wallet, isConnected, connectWallet, syncWalletState]);
 
@@ -79,7 +105,7 @@ const WalletConnect = () => {
           } catch (connectError) {
             console.error('Connect failed, trying sync:', connectError);
             // If connect fails due to BN issues, try sync
-            if (connectError.message.includes('_bn')) {
+            if (connectError.message && connectError.message.includes('_bn')) {
               await syncWalletState();
             } else {
               throw connectError;
