@@ -1,13 +1,55 @@
 'use client'
 
 import Link from 'next/link'
-import { Crown, Sparkles, Shield } from 'lucide-react'
+import { Crown, Sparkles, Shield, Mail, RefreshCw, Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import CtaSection from './CtaSection'
+import { useState, useEffect } from 'react'
 
 const HomePage = () => {
+  const [email, setEmail] = useState('')
+  const [inboxId, setInboxId] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const generateNewInbox = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('http://localhost:5000/api/inbox/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate inbox')
+      }
+      
+      const data = await response.json()
+      setEmail(data.email)
+      setInboxId(data.inboxId)
+    } catch (error) {
+      console.error('Error generating inbox:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const copyToClipboard = () => {
+    if (email) {
+      navigator.clipboard.writeText(email)
+      // You can add a toast notification here if you want
+    }
+  }
+
+  // Generate inbox on component mount
+  useEffect(() => {
+    generateNewInbox()
+  }, [])
+
   return (
     <div className="bg-[#0e0e10] text-white min-h-screen flex flex-col">
       {/* Navbar */}
@@ -47,6 +89,86 @@ const HomePage = () => {
               </Button>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Inbox Section */}
+      <section className="py-16 sm:py-20 bg-[#121214] border-y border-[#ffffff08]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Mail className="h-6 w-6 text-[#10B981]" />
+              <span className="text-[#10B981] font-semibold uppercase tracking-wider">
+                Your Temporary Inbox
+              </span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+              Start Using <span className="bg-gradient-to-r from-[#10B981] to-[#3B82F6] bg-clip-text text-transparent">Disposable Email</span> Right Now
+            </h2>
+            <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">
+              Get a random email address instantly. No registration required, completely free to use.
+            </p>
+          </div>
+          
+          <Card className="bg-[#151517] border border-[#ffffff08] p-6 sm:p-8">
+            <CardHeader className="text-center pb-4">
+              <CardTitle className="text-xl sm:text-2xl text-white">
+                Your Temporary Email Address
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#10B981] mx-auto mb-4"></div>
+                  <p className="text-gray-400">Generating your inbox...</p>
+                </div>
+              ) : email ? (
+                <>
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="flex-1 bg-[#0e0e10] border border-[#ffffff08] rounded-lg p-4">
+                      <div className="flex items-center gap-3">
+                        <Mail className="h-5 w-5 text-[#10B981]" />
+                        <span className="font-mono text-lg text-white">{email}</span>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={copyToClipboard}
+                      className="px-4 py-2 bg-[#10B981] text-white rounded-lg hover:bg-[#059669] transition-colors flex items-center gap-2"
+                    >
+                      <Copy className="h-4 w-4" />
+                      Copy
+                    </Button>
+                  </div>
+                  
+                  <div className="text-center">
+                    <Button 
+                      onClick={generateNewInbox}
+                      variant="outline"
+                      className="px-6 py-3 bg-[#ffffff08] hover:bg-[#ffffff12] text-white rounded-lg transition-colors border border-[#ffffff08] flex items-center gap-2 mx-auto"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Generate New Email
+                    </Button>
+                  </div>
+                  
+                  <div className="text-center text-sm text-gray-400">
+                    <p>Share this email address to receive messages</p>
+                    <p>Messages will appear in your inbox automatically</p>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-400">Failed to generate inbox. Please try again.</p>
+                  <Button 
+                    onClick={generateNewInbox}
+                    className="mt-4 px-6 py-3 bg-[#10B981] text-white rounded-lg hover:bg-[#059669] transition-colors"
+                  >
+                    Retry
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </section>
 

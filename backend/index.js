@@ -13,6 +13,7 @@ import emailRoutes from "./routes/email.route.js";
 import bountyRoutes from "./routes/bounty.route.js";
 import transactionHistoryRoutes from "./routes/transactionHistory.route.js";
 import creditRoutes from "./routes/credit.route.js";
+import inboxRoutes from "./routes/inbox.js";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use("/api/v1/email", emailRoutes);
 app.use("/api/v1/bounty", bountyRoutes);
 app.use("/api/v1/transaction", transactionHistoryRoutes);
 app.use("/api/v1/credit", creditRoutes);
+app.use("/api/inbox", inboxRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
