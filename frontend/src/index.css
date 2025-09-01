@@ -1,10 +1,14 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --font-poppins: "Poppins", sans-serif;
-  --font-jost: "Jost", sans-serif;
-  --font-pt-sans: "PT Sans", sans-serif;
-  --font-outfit:"Outfit", sans-serif;
+@layer base {
+  :root {
+    --font-poppins: "Poppins", sans-serif;
+    --font-jost: "Jost", sans-serif;
+    --font-pt-sans: "PT Sans", sans-serif;
+    --font-outfit: "Outfit", sans-serif;
+  }
 }
 
 /* Browser compatibility fixes */

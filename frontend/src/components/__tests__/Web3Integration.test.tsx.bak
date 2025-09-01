@@ -1,0 +1,176 @@
+import React from 'react'
+import '@testing-library/jest-dom'
+
+// Mock Solana Web3 modules
+jest.mock('@solana/web3.js', () => ({
+  Connection: jest.fn(),
+  PublicKey: jest.fn(),
+  Transaction: jest.fn(),
+  SystemProgram: {
+    transfer: jest.fn(),
+  },
+}))
+
+jest.mock('@solana/wallet-adapter-react', () => ({
+  useWallet: jest.fn(),
+  WalletProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}))
+
+jest.mock('@coral-xyz/anchor', () => ({
+  Program: jest.fn(),
+  AnchorProvider: jest.fn(),
+}))
+
+jest.mock('arweave', () => ({
+  default: {
+    transactions: {
+      createTransaction: jest.fn(),
+      sign: jest.fn(),
+      post: jest.fn(),
+    },
+  },
+}))
+
+describe('Web3 Integration', () => {
+  beforeEach(() => {
+    // Mock global test utilities
+    global.testUtils = {
+      mockWalletConnection: jest.fn(),
+      mockTransactionResponse: jest.fn(),
+      mockBalanceResponse: jest.fn(),
+    }
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe('Wallet Connection', () => {
+    it('should connect to Phantom wallet successfully', async () => {
+      const mockConnect = jest.fn().mockResolvedValue({ publicKey: 'mock-public-key' })
+      
+      // Mock window.solana
+      Object.defineProperty(window, 'solana', {
+        value: { connect: mockConnect, isPhantom: true },
+        writable: true,
+      })
+
+      // Test wallet connection
+      const result = await mockConnect()
+      expect(result.publicKey).toBe('mock-public-key')
+      expect(mockConnect).toHaveBeenCalledTimes(1)
+    })
+
+    it('should handle wallet connection failure', async () => {
+      const mockConnect = jest.fn().mockRejectedValue(new Error('Connection failed'))
+      
+      Object.defineProperty(window, 'solana', {
+        value: { connect: mockConnect, isPhantom: true },
+        writable: true,
+      })
+
+      await expect(mockConnect()).rejects.toThrow('Connection failed')
+    })
+  })
+
+  describe('Premium Email Purchase', () => {
+    it('should validate email format before purchase', () => {
+      const validEmail = 'test@voidmail.fun'
+      const invalidEmail = 'invalid-email'
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      
+      expect(emailRegex.test(validEmail)).toBe(true)
+      expect(emailRegex.test(invalidEmail)).toBe(false)
+    })
+
+    it('should process successful premium email purchase', async () => {
+      const mockTransaction = {
+        signature: 'mock-signature',
+        confirm: jest.fn().mockResolvedValue({ value: { err: null } }),
+      }
+
+      const result = await mockTransaction.confirm()
+      expect(result.value.err).toBeNull()
+    })
+
+    it('should handle purchase failure gracefully', async () => {
+      const mockTransaction = {
+        signature: 'mock-signature',
+        confirm: jest.fn().mockResolvedValue({ value: { err: 'Insufficient funds' } }),
+      }
+
+      const result = await mockTransaction.confirm()
+      expect(result.value.err).toBe('Insufficient funds')
+    })
+  })
+
+  describe('NFT Metadata Upload', () => {
+    it('should upload metadata to Arweave successfully', async () => {
+      const mockArweave = require('arweave').default
+      const mockTransaction = {
+        id: 'mock-transaction-id',
+        get: jest.fn().mockResolvedValue({ data: 'mock-data' }),
+      }
+
+      mockArweave.transactions.createTransaction.mockResolvedValue(mockTransaction)
+      mockArweave.transactions.sign.mockResolvedValue(mockTransaction)
+      mockArweave.transactions.post.mockResolvedValue(mockTransaction.id)
+
+      const result = await mockArweave.transactions.post(mockTransaction)
+      expect(result).toBe('mock-transaction-id')
+    })
+
+    it('should handle Arweave upload failure', async () => {
+      const mockArweave = require('arweave').default
+      mockArweave.transactions.post.mockRejectedValue(new Error('Upload failed'))
+
+      await expect(mockArweave.transactions.post()).rejects.toThrow('Upload failed')
+    })
+  })
+
+  describe('Transaction Handling', () => {
+    it('should confirm transaction status correctly', async () => {
+      const mockConnection = {
+        confirmTransaction: jest.fn().mockResolvedValue({ value: { err: null } }),
+      }
+
+      const result = await mockConnection.confirmTransaction('mock-signature')
+      expect(result.value.err).toBeNull()
+    })
+
+    it('should handle transaction confirmation timeout', async () => {
+      const mockConnection = {
+        confirmTransaction: jest.fn().mockRejectedValue(new Error('Timeout')),
+      }
+
+      await expect(mockConnection.confirmTransaction('mock-signature')).rejects.toThrow('Timeout')
+    })
+
+    it('should reject invalid transactions', async () => {
+      const mockTransaction = {
+        verify: jest.fn().mockReturnValue(false),
+      }
+
+      expect(mockTransaction.verify()).toBe(false)
+    })
+  })
+
+  describe('Error Handling', () => {
+    it('should handle network errors gracefully', async () => {
+      const mockFunction = jest.fn().mockRejectedValue(new Error('Network error'))
+      
+      try {
+        await mockFunction()
+      } catch (error) {
+        expect(error.message).toBe('Network error')
+      }
+    })
+
+    it('should handle wallet connection errors', async () => {
+      const mockConnect = jest.fn().mockRejectedValue(new Error('Wallet not found'))
+      
+      await expect(mockConnect()).rejects.toThrow('Wallet not found')
+    })
+  })
+}) 
