@@ -8,6 +8,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import CtaSection from './CtaSection'
 import { useState, useEffect } from 'react'
+import { API_CONFIG } from '@/config/api'
 
 const HomePage = () => {
   const [email, setEmail] = useState('')
@@ -17,7 +18,7 @@ const HomePage = () => {
   const generateNewInbox = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('http://localhost:5000/api/inbox/new', {
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}${API_CONFIG.INBOX_ENDPOINTS.NEW}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

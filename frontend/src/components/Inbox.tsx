@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Mail, Clock, User, MessageSquare, X } from 'lucide-react'
+import { API_CONFIG } from '@/config/api'
 
 interface Message {
   id: string
@@ -28,7 +29,7 @@ const Inbox: React.FC<InboxProps> = ({ inboxId }) => {
       setIsLoading(true)
       setError(null)
       
-      const response = await fetch(`http://localhost:5000/api/inbox/${inboxId}`)
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}${API_CONFIG.INBOX_ENDPOINTS.MESSAGES(inboxId)}`)
       
       if (!response.ok) {
         throw new Error('Failed to fetch messages')
