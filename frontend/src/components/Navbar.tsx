@@ -2,156 +2,133 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Crown } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Menu, X, Wallet, LogOut } from 'lucide-react'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import { useWeb3Store } from '../../store/web3Store'
+import { Button } from '@/components/ui/button'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const router = useRouter()
+  const { connected, publicKey } = useWallet()
+  const { balance, isConnected, disconnectWallet } = useWeb3Store()
 
-  // Handle scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
+    const handleScroll = () => setIsScrolled(window.scrollY > 10)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isMenuOpen && !(event.target as Element).closest('nav')) {
-        setIsMenuOpen(false)
-      }
+      if (isMenuOpen && !(event.target as Element).closest('nav')) setIsMenuOpen(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isMenuOpen])
 
-  // Close mobile menu on route change
-  const handleLinkClick = () => {
-    setIsMenuOpen(false)
+  const handleLinkClick = () => setIsMenuOpen(false)
+
+  const handleDisconnect = async () => {
+    try {
+      await disconnectWallet()
+      setIsMenuOpen(false)
+    } catch (error) {
+      console.error('Error disconnecting wallet:', error)
+    }
   }
 
-  const handlePremiumClick = () => {
-    console.log("Premium button clicked")
-    router.push("/premium")
-    setIsMenuOpen(false)
-  }
+  const formatAddress = (address: string) => `${address.slice(0, 4)}...${address.slice(-4)}`
 
   return (
-    <nav className={`backdrop-blur-lg bg-[#151517] sticky top-0 z-50 flex justify-between items-center px-4 sm:px-6 lg:px-8 py-3 sm:py-4 border-b border-[#ffffff08] rounded-2xl ml-2 mr-2 transition-all duration-300 ${
-      isScrolled ? 'shadow-lg' : ''
+    <nav className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ${
+      isScrolled ? 'bg-white/90 shadow-sm backdrop-blur' : 'bg-white/80 backdrop-blur'
     }`}>
-      {/* Logo */}
-      <Link href="/" onClick={handleLinkClick}>
-        <div className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-[#10B981] to-[#3B82F6] bg-clip-text text-transparent">
-          VOIDMAIL
-        </div>
-      </Link>
-      
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center gap-6">
-        <div className="space-x-8 text-sm font-medium uppercase tracking-wider">
-          {[
-            { name: "Home", path: "/" },
-            { name: "About", path: "/about" },
-            { name: "Contact", path: "/contact" },
-            { name: "Privacy Policy", path: "/privacy" }
-          ].map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className="hover:text-[#10B981] transition-all duration-300"
-              onClick={handleLinkClick}
-            >
-              {item.name}
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-3 items-center h-16">
+          {/* Logo */}
+          <div className="justify-self-start">
+            <Link href="/" onClick={handleLinkClick} className="inline-flex items-center">
+              <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                VoidMail.fun
+              </span>
             </Link>
-          ))}
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2 px-4 py-2 bg-[#3B82F6] text-white rounded-lg text-sm font-medium hover:scale-105 transition-transform"
-            onClick={handleLinkClick}
-          >
-            Dashboard
-          </Link>
-          <button
-            onClick={handlePremiumClick}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#10B981] to-[#3B82F6] text-white rounded-lg text-sm font-medium hover:scale-105 transition-transform"
-          >
-            <Crown className="h-4 w-4" />
-            Premium
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-[#ffffff08] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-opacity-50"
-        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-        aria-expanded={isMenuOpen}
-      >
-        <div className="relative w-6 h-6">
-          <span className={`absolute inset-0 transform transition-all duration-300 ${
-            isMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-1'
-          }`}>
-            <X className={`w-6 h-6 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} />
-          </span>
-          <span className={`absolute inset-0 transform transition-all duration-300 ${
-            isMenuOpen ? 'opacity-0' : 'opacity-100'
-          }`}>
-            <Menu className="w-6 h-6" />
-          </span>
-        </div>
-      </button>
-
-      {/* Mobile Navigation */}
-      <div className={`md:hidden absolute top-full left-0 right-0 bg-[#151517] border-t border-[#ffffff08] rounded-b-2xl transition-all duration-300 ease-in-out overflow-hidden ${
-        isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-      }`}>
-        <div className="py-4 px-4 space-y-3">
-          {/* Navigation Links */}
-          <div className="space-y-2">
-            {[
-              { name: "Home", path: "/" },
-              { name: "About", path: "/about" },
-              { name: "Contact", path: "/contact" },
-              { name: "Privacy Policy", path: "/privacy" }
-            ].map((item) => (
-              <Link
-                key={item.name}
-                href={item.path}
-                className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-[#ffffff08] rounded-lg transition-all duration-300 text-sm font-medium uppercase tracking-wider"
-                onClick={handleLinkClick}
-              >
-                {item.name}
-              </Link>
-            ))}
           </div>
-          
-          {/* Action Buttons */}
-          <div className="pt-4 border-t border-[#ffffff08] space-y-3">
-            <Link href="/dashboard" onClick={handleLinkClick}>
-              <button className="w-full px-4 py-3 bg-[#3B82F6] text-white rounded-lg text-sm font-medium hover:scale-105 transition-transform flex items-center justify-center">
-                Dashboard
-              </button>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center justify-center gap-8">
+            <Link href="/" onClick={handleLinkClick} className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+              Home
             </Link>
-            <button
-              onClick={handlePremiumClick}
-              className="w-full px-4 py-3 bg-gradient-to-r from-[#10B981] to-[#3B82F6] text-white rounded-lg text-sm font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
-            >
-              <Crown className="h-4 w-4" />
-              Premium
+            <Link href="/about" onClick={handleLinkClick} className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+              About
+            </Link>
+            <Link href="/contact" onClick={handleLinkClick} className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+              Contact
+            </Link>
+          </div>
+
+          {/* Wallet / Mobile Toggle */}
+          <div className="justify-self-end flex items-center gap-3">
+            <div className="hidden md:block">
+              {connected && isConnected ? (
+                <div className="flex items-center gap-3">
+                  <div className="bg-gray-50 px-3 py-2 rounded-md border border-gray-200">
+                    <span className="text-xs text-gray-500">Balance:</span>
+                    <span className="text-sm font-mono text-gray-900 ml-2">{balance.toFixed(3)} SOL</span>
+                  </div>
+                  <div className="bg-gray-50 px-3 py-2 rounded-md border border-gray-200 flex items-center gap-2">
+                    <Wallet className="h-4 w-4 text-purple-600" />
+                    <span className="text-sm font-mono text-gray-900">{formatAddress(publicKey?.toString() || '')}</span>
+                  </div>
+                  <Button onClick={handleDisconnect} variant="outline" size="sm" className="border-gray-200 text-gray-700 hover:bg-gray-100">
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <WalletMultiButton className="!bg-purple-600 !text-white !rounded-md !h-10 !px-4 hover:!bg-purple-700 !transition-colors" />
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors" aria-label="Toggle menu">
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="absolute top-full left-0 right-0 bg-white border-b md:hidden">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col space-y-4">
+            <Link href="/" onClick={handleLinkClick} className="text-gray-700 hover:text-gray-900 font-medium">Home</Link>
+            <Link href="/about" onClick={handleLinkClick} className="text-gray-700 hover:text-gray-900 font-medium">About</Link>
+            <Link href="/contact" onClick={handleLinkClick} className="text-gray-700 hover:text-gray-900 font-medium">Contact</Link>
+            <div className="border-t pt-4">
+              {connected && isConnected ? (
+                <div className="space-y-3">
+                  <div className="bg-gray-50 px-3 py-2 rounded-md border border-gray-200">
+                    <span className="text-xs text-gray-500">Balance:</span>
+                    <span className="text-sm font-mono text-gray-900 ml-2">{balance.toFixed(3)} SOL</span>
+                  </div>
+                  <div className="bg-gray-50 px-3 py-2 rounded-md border border-gray-200 flex items-center gap-2">
+                    <Wallet className="h-4 w-4 text-purple-600" />
+                    <span className="text-sm font-mono text-gray-900">{formatAddress(publicKey?.toString() || '')}</span>
+                  </div>
+                  <Button onClick={handleDisconnect} variant="outline" className="w-full border-gray-200 text-gray-700 hover:bg-gray-100">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Disconnect Wallet
+                  </Button>
+                </div>
+              ) : (
+                <WalletMultiButton className="!w-full !bg-purple-600 !text-white !rounded-md !h-10 hover:!bg-purple-700 !transition-colors" />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

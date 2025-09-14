@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { WalletProvider } from '@/components/WalletProvider'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -36,15 +38,27 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <div className="min-h-screen bg-background text-white transition-colors duration-200">
-          <Navbar />
-          <main className="pt-16">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <WalletProvider>
+          <div className="min-h-screen bg-white text-gray-900 transition-colors duration-200">
+            <Navbar />
+            <main className="pt-16">
+              {children}
+            </main>
+            <Footer />
+            <Toaster 
+              position="bottom-right"
+              toastOptions={{
+                style: {
+                  background: '#ffffff',
+                  color: '#111827',
+                  border: '1px solid #e5e7eb',
+                },
+              }}
+            />
+          </div>
+        </WalletProvider>
       </body>
     </html>
   )

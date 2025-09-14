@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -25,37 +25,39 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* VoidMail Dark Theme */
+    --background: 224 7% 5%;  /* #0e0e10 */
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 224 8% 8%;  /* #151517 */
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 224 8% 8%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
+    --primary: 160 84% 39%;  /* #10B981 - VoidMail green */
+    --primary-foreground: 224 7% 5%;
+    --secondary: 224 15% 6%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 224 15% 6%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 224 15% 6%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
+    --border: 220 13% 13%;  /* Similar to #ffffff08 */
+    --input: 220 13% 13%;
+    --ring: 160 84% 39%;  /* VoidMail green for focus rings */
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-gray-900;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* VoidMail specific global styles */
 }
 
 @layer utilities {

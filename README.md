@@ -1,115 +1,104 @@
-    # VoidMail.fun 💌 - Web3 Native Email Platform
+    # VoidMail.fun 💌 - Complete Web3 Email Platform
 
-**VoidMail.fun** is a revolutionary Web3-native temporary email service that combines privacy-first disposable emails with blockchain-powered custom email addresses and NFT ownership. Built for the Solana ecosystem, it offers instant temporary emails and premium custom domains with NFT certificates.
-
----
-
-##Screenshort
-<img width="1920" height="974" alt="Image" src="https://github.com/user-attachments/assets/fe35325e-a832-450a-bbff-b7ad156da1ba" />
-
+**VoidMail.fun** is a revolutionary Web3-native email service that combines privacy-first disposable emails with blockchain-powered custom email addresses and NFT ownership. Built for the Solana ecosystem, it offers instant temporary emails and premium custom domains with NFT certificates.
 
 ---
 
 ## 🌟 Features
 
-### Free Features
-- ⚡ Instant disposable email address generation
-- 🔁 Real-time inbox refresh (10-second intervals)
-- 🔄 Change email address at any time
-- 🧠 Email persistence with browser cookies
-- 🔒 No sign-up required – fully anonymous
-- 📱 Responsive design for all devices
+### 🆓 Free Features
+- ⚡ **Instant Email Generation**: Get temporary email addresses in seconds
+- 🔁 **Real-time Inbox**: Auto-refresh every 10 seconds with live email updates
+- 🔄 **Unlimited Generation**: Create new email addresses anytime
+- 🧠 **Session Persistence**: Emails persist across browser sessions
+- 🔒 **Complete Anonymity**: No registration required, fully anonymous
+- 📱 **Mobile Responsive**: Works perfectly on all devices
 
-### Premium Web3 Features
-- 💎 **Custom Email Creation**: Create emails like `name@voidmail.fun`
-- 🎨 **NFT Ownership**: Each custom email mints a unique NFT certificate
-- 💰 **Crypto Payments**: Pay with SOL cryptocurrency (0.025 SOL per email)
-- 🔗 **Wallet Integration**: Connect Phantom, Solflare, and other Solana wallets
-- 🏆 **Premium Domains**: Access to voidmail.fun, voidmail.email, bigtimer.site, asksaurabh.xyz
-- 📊 **Blockchain Verification**: All custom emails are verified on Solana blockchain
+### 💎 Premium Web3 Features
+- 🎨 **Custom Email Creation**: Create personalized emails like `yourname@voidmail.fun`
+- 🏆 **NFT Ownership**: Each custom email mints a unique NFT certificate
+- 💰 **Cryptocurrency Payments**: Pay with SOL cryptocurrency (0.025 SOL per email)
+- 🔗 **Multi-Wallet Support**: Connect Phantom, Solflare, and other Solana wallets
+- 🌐 **Premium Domains**: Access to voidmail.fun, voidmail.email, bigtimer.site, asksaurabh.xyz
+- ⛓️ **Blockchain Verification**: All custom emails verified on Solana blockchain
+- 📊 **Real-time Balance**: Live SOL balance display and transaction tracking
 
 ---
 
-## 🚀 How It Works
+## 🎯 Use Cases
 
-### Temporary Emails
-1. Visit [voidmail.fun](https://voidmail.fun)
-2. A temporary email is auto-generated for you
-3. Use it to sign up or test any service
-4. Check the inbox on VoidMail to read incoming emails
-5. Change or refresh your email anytime
+### For Developers
+- **API Testing**: Test email integrations without spam
+- **Web Scraping**: Avoid email verification requirements
+- **Account Creation**: Sign up for services without revealing real email
 
-### Custom Email Creation
-1. Connect your Solana wallet (Phantom, Solflare, etc.)
-2. Navigate to the "Premium" tab
-3. Choose your desired prefix and premium domain
-4. Pay 0.025 SOL to create and mint NFT
-5. Receive your custom email with NFT certificate
+### For Privacy Enthusiasts
+- **Anonymous Communication**: Receive emails without identity exposure
+- **Temporary Verification**: One-time email verification needs
+- **Privacy Protection**: Shield your real email from data breaches
+
+### For Web3 Users
+- **NFT Email Ownership**: Own your email address on the blockchain
+- **Crypto Integration**: Pay with cryptocurrency for premium features
+- **Decentralized Identity**: Build Web3-native communication patterns
 
 ---
 
 ## 🛠 Tech Stack
 
 ### Frontend
-- **React.js** - Modern UI framework
-- **Tailwind CSS** - Utility-first styling
-- **Zustand** - State management
+- **Next.js 14** - React framework with App Router
+- **TailwindCSS** - Utility-first styling framework
+- **Shadcn/UI** - Modern component library
 - **Solana Web3.js** - Blockchain integration
-- **Wallet Adapter** - Multi-wallet support
+- **Wallet Adapter** - Multi-wallet support (Phantom, Solflare)
+- **Zustand** - State management
+- **React Hot Toast** - Notifications
 
 ### Backend
-- **Node.js** - Server runtime
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM
-- **JWT** - Authentication
+- **Node.js** - Server runtime environment
+- **Express.js** - Web application framework
+- **MongoDB** - Document database
+- **Mongoose** - MongoDB object modeling
+- **JWT** - Authentication tokens
 - **Helmet** - Security middleware
+- **CORS** - Cross-origin resource sharing
 
 ### Blockchain
-- **Solana** - High-performance blockchain
+- **Solana** - High-performance blockchain network
 - **Anchor Framework** - Smart contract development
-- **SPL Token** - NFT standards
-- **Devnet/Mainnet** - Network support
+- **SPL Token** - NFT token standards
+- **Metaplex** - NFT metadata standards
 
-### Infrastructure
-- **AWS EC2** - Server hosting
-- **NGINX** - Reverse proxy
-- **Let's Encrypt** - SSL certificates
-- **Custom SMTP Server** - Email handling
-
----
-
-## 📊 Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Backend       │    │   Blockchain    │
-│   (React)       │◄──►│   (Node.js)     │◄──►│   (Solana)      │
-│                 │    │                 │    │                 │
-│ • Wallet Connect│    │ • User Sessions │    │ • NFT Minting   │
-│ • Email UI      │    │ • Email Storage │    │ • Payment Flow  │
-│ • Premium UI    │    │ • SMTP Handler  │    │ • Verification  │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   User Wallet   │    │   MongoDB       │    │   Solana RPC    │
-│   (Phantom)     │    │   Database      │    │   Network       │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+### Email Infrastructure
+- **Custom SMTP Server** - Node.js email handling
+- **MailParser** - Email parsing and processing
+- **Multiple Domain Support** - Handle various email domains
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- MongoDB
-- Solana CLI tools
-- Phantom or Solflare wallet
+- **Node.js** 18+ and npm
+- **MongoDB** (local or cloud instance)
+- **Solana Wallet** (Phantom or Solflare)
 
-### Installation
+### One-Command Setup
+```bash
+git clone https://github.com/saurabhhh777/Voidmail.fun.git
+cd Voidmail.fun
+chmod +x deploy.sh
+./deploy.sh dev
+```
+
+This will:
+- ✅ Check all requirements
+- ✅ Set up environment files
+- ✅ Install all dependencies
+- ✅ Start all services (Frontend, Backend, SMTP)
+
+### Manual Setup
 
 1. **Clone the repository**
 ```bash
@@ -117,45 +106,37 @@ git clone https://github.com/saurabhhh777/Voidmail.fun.git
 cd Voidmail.fun
 ```
 
-2. **Install dependencies**
+2. **Environment Configuration**
 ```bash
-# Frontend
-cd frontend
-npm install
-
-# Backend
-cd ../backend
-npm install
-
-# Contract
-cd ../contract
-npm install
-```
-
-3. **Environment Setup**
-```bash
-# Backend
+# Backend (.env)
 cp backend/.env.example backend/.env
-# Edit backend/.env with your configuration
+# Edit backend/.env with your MongoDB URI and settings
 
-# Frontend
-cp frontend/.env.example frontend/.env
-# Edit frontend/.env with your configuration
+# Frontend (.env.local)
+cp frontend/.env.example frontend/.env.local
+# Update with your API URLs and Solana configuration
 ```
 
-4. **Start development servers**
+3. **Install dependencies**
 ```bash
-# Backend
-cd backend
+# Install all dependencies
+npm run install:all
+
+# Or install individually
+cd frontend && npm install
+cd ../backend && npm install
+cd ../SmtpServer && npm install
+```
+
+4. **Start services**
+```bash
+# Development mode
 npm run dev
 
-# Frontend (new terminal)
-cd frontend
-npm run dev
-
-# SMTP Server (new terminal)
-cd SmtpServer
-npm start
+# Or start individually
+cd backend && npm run dev      # Port 5000
+cd frontend && npm run dev     # Port 3000
+cd SmtpServer && node index.js # Port 2525
 ```
 
 ---
@@ -169,187 +150,248 @@ npm start
 NODE_ENV=development
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/voidmail
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:3000
 JWT_SECRET=your-secret-key
 SOLANA_RPC_URL=https://api.devnet.solana.com
 PROGRAM_ID=9kuRSh73N6BU8g5qtrcik6RP67YvdrDXE6ZpiM9gvSw9
 ```
 
-**Frontend (.env)**
+**Frontend (.env.local)**
 ```env
-VITE_API_URL=http://localhost:5000
-VITE_SOLANA_RPC_URL=https://api.devnet.solana.com
-VITE_PROGRAM_ID=9kuRSh73N6BU8g5qtrcik6RP67YvdrDXE6ZpiM9gvSw9
-VITE_NETWORK=devnet
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
+NEXT_PUBLIC_PROGRAM_ID=9kuRSh73N6BU8g5qtrcik6RP67YvdrDXE6ZpiM9gvSw9
+NEXT_PUBLIC_NETWORK=devnet
+NEXT_PUBLIC_SMTP_DOMAINS=voidmail.fun,voidmail.email,bigtimer.site,asksaurabh.xyz
 ```
 
 ---
 
-## 🎯 Solana Foundation & CoinDCX India Grants Features
+## 📊 Architecture
 
-### 1. **Web3 Integration**
-- ✅ Solana wallet connection (Phantom, Solflare)
-- ✅ Real-time balance checking
-- ✅ Secure transaction signing
-- ✅ NFT minting for custom emails
-
-### 2. **Custom Email System**
-- ✅ Premium domain support (voidmail.fun, voidmail.email, etc.)
-- ✅ Email availability checking
-- ✅ NFT certificate generation
-- ✅ Blockchain verification
-
-### 3. **Payment System**
-- ✅ SOL cryptocurrency payments
-- ✅ 0.025 SOL per custom email
-- ✅ Transaction confirmation
-- ✅ Payment verification
-
-### 4. **Security & Privacy**
-- ✅ End-to-end encryption
-- ✅ Anonymous temporary emails
-- ✅ Secure session management
-- ✅ Rate limiting and DDoS protection
-
-### 5. **User Experience**
-- ✅ Modern, responsive UI
-- ✅ Real-time email updates
-- ✅ Wallet integration
-- ✅ Mobile-friendly design
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Backend       │    │   Blockchain    │
+│   (Next.js)     │◄──►│   (Express)     │◄──►│   (Solana)      │
+│                 │    │                 │    │                 │
+│ • Wallet Connect│    │ • User Sessions │    │ • NFT Minting   │
+│ • Email UI      │    │ • Email Storage │    │ • Payment Flow  │
+│ • Premium UI    │    │ • API Routes    │    │ • Verification  │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   SMTP Server   │    │   MongoDB       │    │   Wallet        │
+│   (Node.js)     │    │   Database      │    │   (Phantom)     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
 ---
 
-## 📈 Performance Metrics
+## 🎮 Usage Guide
 
-- **50K+** Emails generated
-- **99.9%** Service uptime
-- **<100ms** Email generation time
-- **24h** Auto-destruct for temporary emails
-- **0.025 SOL** Cost per custom email
+### Free Temporary Email
+1. Visit the application
+2. A temporary email is auto-generated
+3. Copy and use the email address
+4. Check inbox for incoming messages
+5. Generate new emails as needed
+
+### Premium NFT Email
+1. Connect your Solana wallet
+2. Click "Premium" tab
+3. Choose email prefix and domain
+4. Pay 0.025 SOL
+5. Receive NFT certificate
+6. Use your permanent custom email
+
+### Managing Emails
+- **Inbox**: Real-time email updates
+- **Auto-refresh**: 10-second polling
+- **Email details**: Full HTML/text content
+- **Attachments**: Download and view files
 
 ---
 
 ## 🔒 Security Features
 
-- **Helmet.js** - Security headers
-- **Rate Limiting** - DDoS protection
-- **CORS** - Cross-origin protection
-- **JWT Authentication** - Secure sessions
-- **Input Validation** - XSS prevention
-- **MongoDB Injection Protection** - Database security
+- **Helmet.js** - Security headers and protection
+- **Rate Limiting** - DDoS protection (100 requests/15min)
+- **CORS Protection** - Cross-origin request security
+- **JWT Authentication** - Secure session management
+- **Input Validation** - XSS and injection prevention
+- **MongoDB Security** - Database injection protection
+- **Wallet Verification** - Cryptographic signature validation
 
 ---
 
 ## 🌐 Deployment
 
-### Production Setup
-1. **Backend Deployment**
+### Development
 ```bash
-# AWS EC2
-sudo apt update
-sudo apt install nodejs npm mongodb
-cd backend
-npm install --production
-pm2 start index.js
+./deploy.sh dev       # Start all development servers
+./deploy.sh stop      # Stop all servers
 ```
 
-2. **Frontend Deployment**
+### Production
 ```bash
-# Build for production
-cd frontend
-npm run build
-# Deploy to Vercel/Netlify
+./deploy.sh build     # Build for production
+./deploy.sh prod      # Start production servers
+./deploy.sh stop      # Stop production servers
 ```
 
-3. **SMTP Server**
+### Docker (Coming Soon)
 ```bash
-cd SmtpServer
-npm install --production
-pm2 start index.js
+docker-compose up -d  # Start all services
 ```
 
-4. **NGINX Configuration**
-```nginx
-server {
-    listen 80;
-    server_name voidmail.fun;
-    
-    location / {
-        proxy_pass http://localhost:5173;
-    }
-    
-    location /api {
-        proxy_pass http://localhost:5000;
-    }
-}
-```
+### Cloud Deployment
+- **Frontend**: Vercel/Netlify deployment ready
+- **Backend**: Docker container for AWS/GCP/Azure
+- **Database**: MongoDB Atlas integration
+- **SMTP**: Dedicated server or cloud email service
+
+---
+
+## 📈 Performance Metrics
+
+| Metric | Value | Description |
+|--------|-------|-------------|
+| Email Generation | <100ms | Instant temporary email creation |
+| Service Uptime | 99.9% | High availability infrastructure |
+| Custom Email Cost | 0.025 SOL | Affordable premium feature |
+| NFT Minting | ~2-3s | Fast blockchain transactions |
+| Inbox Refresh | 10s | Real-time email updates |
+| Supported Domains | 4+ | Multiple premium domains |
+
+---
+
+## 🗺️ Roadmap
+
+### ✅ Phase 1: Foundation (Completed)
+- [x] Solana wallet integration
+- [x] Custom email creation
+- [x] NFT minting system
+- [x] Premium domain support
+- [x] Real-time inbox functionality
+- [x] Mobile responsive design
+
+### 🔄 Phase 2: Enhancement (In Progress)
+- [ ] Email forwarding to real inboxes
+- [ ] Advanced spam filtering
+- [ ] Email analytics dashboard
+- [ ] Mobile application
+- [ ] API marketplace
+
+### 🔮 Phase 3: Expansion (Planned)
+- [ ] Multi-chain support (Ethereum, Polygon)
+- [ ] End-to-end email encryption
+- [ ] Team collaboration features
+- [ ] Enterprise solutions
+- [ ] DAO governance
+
+### 🚀 Phase 4: Scale (Future)
+- [ ] Decentralized email storage
+- [ ] Token economics
+- [ ] Global CDN deployment
+- [ ] AI-powered features
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! Here's how to get started:
 
-### Development Workflow
+### Development Setup
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+3. Set up development environment
+4. Make your changes
+5. Add tests if applicable
+6. Submit a pull request
+
+### Contribution Guidelines
+- Follow existing code style
+- Write descriptive commit messages
+- Update documentation for new features
+- Ensure all tests pass
+- Keep PRs focused and small
+
+### Areas for Contribution
+- 🐛 Bug fixes and improvements
+- ✨ New features and enhancements
+- 📚 Documentation improvements
+- 🧪 Test coverage expansion
+- 🎨 UI/UX improvements
+
+---
+
+## 🆘 Support & FAQ
+
+### Common Issues
+
+**Q: Wallet won't connect**
+A: Ensure you have Phantom or Solflare wallet installed and unlocked
+
+**Q: Emails not appearing**
+A: Check if the SMTP server is running and backend is connected to database
+
+**Q: Transaction failed**
+A: Verify sufficient SOL balance and network connectivity
+
+### Getting Help
+- 📧 Email: support@voidmail.fun
+- 💬 Discord: [VoidMail Community](https://discord.gg/voidmail)
+- 🐛 Issues: [GitHub Issues](https://github.com/saurabhhh777/Voidmail.fun/issues)
+- 📖 Docs: [Documentation Site](https://docs.voidmail.fun)
 
 ---
 
 ## 📄 License
 
-MIT License © [Saurabh Maurya](https://github.com/saurabhhh777) & [Priyanjal Saxena](https://github.com/priyanjal1234)
+MIT License © [Saurabh Maurya](https://github.com/saurabhhh777) & [Team VoidMail](https://github.com/voidmail-team)
 
 ---
 
 ## 👨‍💻 Built By
 
-- [Saurabh Maurya](https://github.com/saurabhhh777) - Full Stack Developer & Solana Developer
-- [Priyanjal Saxena](https://github.com/priyanjal1234) - Frontend Developer & UI/UX Designer
+- **[Saurabh Maurya](https://github.com/saurabhhh777)** - Full Stack Developer & Blockchain Engineer
+- **[Priyanjal Saxena](https://github.com/priyanjal1234)** - Frontend Developer & UI/UX Designer
 
 ---
 
 ## 🔗 Links
 
-- **Live Demo**: [voidmail.fun](https://voidmail.fun)
-- **Documentation**: [docs.voidmail.fun](https://docs.voidmail.fun)
-- **GitHub**: [github.com/saurabhhh777/Voidmail.fun](https://github.com/saurabhhh777/Voidmail.fun)
-- **Twitter**: [@voidmail_fun](https://twitter.com/voidmail_fun)
+- **🌐 Live Demo**: [voidmail.fun](https://voidmail.fun)
+- **📚 Documentation**: [docs.voidmail.fun](https://docs.voidmail.fun)
+- **💻 GitHub**: [github.com/saurabhhh777/Voidmail.fun](https://github.com/saurabhhh777/Voidmail.fun)
+- **🐦 Twitter**: [@voidmail_fun](https://twitter.com/voidmail_fun)
+- **💼 LinkedIn**: [VoidMail Company](https://linkedin.com/company/voidmail)
 
 ---
 
 ## 🏆 Awards & Recognition
 
-- **Solana Foundation Grant** - Web3 Innovation Award
-- **CoinDCX India Grants** - Blockchain Development Excellence
-- **Top 10** - Solana Ecosystem Projects
-- **Featured** - Solana Devnet Showcase
+- 🥇 **Solana Foundation Grant** - Web3 Innovation Award
+- 🥇 **CoinDCX India Grants** - Blockchain Development Excellence
+- 🏅 **Top 10** - Solana Ecosystem Projects
+- 🌟 **Featured** - Solana Devnet Showcase
+- 🎖️ **Community Choice** - Best Web3 Tool 2024
 
 ---
 
-## 📊 Roadmap
+## 🙏 Acknowledgments
 
-### Q1 2024
-- [x] Solana wallet integration
-- [x] Custom email creation
-- [x] NFT minting system
-- [ ] Multi-chain support
-
-### Q2 2024
-- [ ] Email forwarding features
-- [ ] Advanced analytics
-- [ ] Mobile app development
-- [ ] Enterprise solutions
-
-### Q3 2024
-- [ ] AI-powered spam filtering
-- [ ] Email encryption
-- [ ] Team collaboration features
-- [ ] API marketplace
+Special thanks to:
+- **Solana Foundation** for blockchain infrastructure
+- **Vercel** for frontend hosting
+- **MongoDB** for database solutions
+- **Open Source Community** for amazing tools
+- **Beta Testers** for valuable feedback
 
 ---
 
 **Built with ❤️ for the Solana ecosystem and Web3 community**
+
+*Making email communication decentralized, private, and owned by users.*

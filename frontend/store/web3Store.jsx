@@ -73,7 +73,7 @@ export const useWeb3Store = create(
 
           console.log('Creating connection and provider...');
           // Create connection and provider
-          const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
+          const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com");
           const provider = new AnchorProvider(connection, wallet, { commitment: "confirmed" });
 
           console.log('Loading program with IDL...');
@@ -213,7 +213,7 @@ export const useWeb3Store = create(
           }
 
           console.log('Refreshing wallet balance...');
-          const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
+          const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com");
           const publicKey = new PublicKey(walletAddress);
           
           const balance = await connection.getBalance(publicKey);
@@ -330,7 +330,7 @@ export const useWeb3Store = create(
           }
 
           // Check if user has enough SOL
-          const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
+          const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com");
           const balance = await connection.getBalance(wallet.publicKey);
 
           if (balance < expectedAmount) {
@@ -508,7 +508,7 @@ export const useWeb3Store = create(
             return 0;
           }
 
-          const connection = new Connection(import.meta.env.VITE_SOLANA_RPC_URL || "https://api.devnet.solana.com");
+          const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com");
           const publicKey = new PublicKey(walletAddress);
           const balance = await connection.getBalance(publicKey);
 
