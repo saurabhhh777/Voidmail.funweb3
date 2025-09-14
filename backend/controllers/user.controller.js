@@ -310,10 +310,8 @@ export const checkEmailAvailability = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Email availability checked',
-            data: {
-                email,
-                available: !existingUser
-            }
+            email,
+            available: !existingUser
         });
 
     } catch (error) {
